@@ -42,7 +42,7 @@ This project teaches you:
 1. **Clone or navigate to the project directory**
 
    ```bash
-   cd "c:\Users\Admin\OneDrive\Documents\Github\Streamlit"
+   cd <directory-path>
    ```
 
 2. **Create a Python virtual environment** (recommended)
