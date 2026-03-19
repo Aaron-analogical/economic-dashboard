@@ -291,13 +291,13 @@ with tab1:
     with chart_col1:
         df_unemployment = fetch_fred_data("UNRATE", start_str, end_str)
         fig = create_time_series_chart(df_unemployment, "Unemployment Rate (%)", "Rate (%)")
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
     
     # Federal Funds Rate
     with chart_col2:
         df_fed_rate = fetch_fred_data("FEDFUNDS", start_str, end_str)
         fig = create_time_series_chart(df_fed_rate, "Federal Funds Rate (%)", "Rate (%)")
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
     
     # CPI (Inflation)
     chart_col3, chart_col4 = st.columns(2)
@@ -306,13 +306,13 @@ with tab1:
         df_cpi = fetch_fred_data("CPIAUCSL", start_str, end_str)
         df_cpi = compute_yoy_change(df_cpi)
         fig = create_time_series_chart(df_cpi, "CPI Inflation Rate (YoY %)", "% Change (YoY)")
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
     
     # 10-Year Treasury Yield
     with chart_col4:
         df_treasury = fetch_fred_data("DGS10", start_str, end_str)
         fig = create_time_series_chart(df_treasury, "10-Year Treasury Yield (%)", "Rate (%)")
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
 
 # ============================================================================
 # TAB 2: COMPARISONS
@@ -340,7 +340,7 @@ with tab2:
             # Create and display comparison chart
             fig = create_comparison_chart(comparison_data, 
                                          "Normalized Comparison (Base = 100)")
-            st.plotly_chart(fig, width='stretch')
+            st.plotly_chart(fig, use_container_width=True)
             
             st.info("""
             **Note:** Values are normalized to a base of 100 at the start date 
@@ -366,7 +366,7 @@ with tab3:
     
     if not df_data.empty:
         st.write(f"**{selected_indicator}** - {len(df_data)} observations")
-        st.dataframe(df_data, width='stretch')
+        st.dataframe(df_data, use_container_width=True)
         
         # CSV download button
         csv = df_data.to_csv(index=False)

@@ -50,6 +50,3 @@ logs/
 # Data files (optional - uncomment if needed)
 # *.csv
 # data/
-
-#markdown linter
-.markdownlint.json
