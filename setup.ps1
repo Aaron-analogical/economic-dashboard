@@ -24,7 +24,7 @@ python -m pip install --upgrade pip setuptools wheel
 
 # Install requirements
 Write-Host "Installing dependencies..." -ForegroundColor Cyan
-pip install -r requirements.txt
+pip install -r streamlit/requirements.txt
 
 # Create .env file from .env.example
 if (-not (Test-Path ".env")) {
