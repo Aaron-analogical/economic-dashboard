@@ -39,17 +39,48 @@ st.set_page_config(
 FRED_API_KEY = os.getenv("FRED_API_KEY", "")
 FRED_BASE_URL = "https://api.stlouisfed.org/fred/series/observations"
 
-# Key economic indicators and their FRED series IDs
+# Key economic indicators and their FRED series IDs, organized by category
 ECONOMIC_INDICATORS = {
+    # Macroeconomic
     "GDP": "A191RL1Q225SBEA",
+    
+    # Labor Market
     "Unemployment Rate": "UNRATE",
+    "Labor Force Participation": "CIVPART",
+    "Initial Jobless Claims": "ICSA",
+    "Non-Farm Payroll": "PAYEMS",
+    "Unemployment (25+ years)": "LNU04000025",
+    
+    # Inflation & Prices
     "Inflation (CPI)": "CPIAUCSL",
+    "Core CPI": "CPILFESL",
+    "Producer Price Index": "PCEPI",
+    
+    # Interest Rates
     "Federal Funds Rate": "FEDFUNDS",
     "10-Year Treasury Yield": "DGS10",
+    "2-Year Treasury Yield": "DGS2",
+    "30-Year Mortgage Rate": "MORTGAGE30US",
+    
+    # Housing
+    "Housing Starts": "HOUST",
+    "Building Permits": "PERMIT",
+    "Home Prices (Case-Shiller)": "CSUSHPISA",
+    
+    # Production & Business Activity
+    "Industrial Production": "INDPRO",
+    "ISM Manufacturing PMI": "MMNRNJ",
+    "Retail Sales": "RSXFS",
+    "Consumer Disposable Income": "DSPI",
+    
+    # Markets
     "S&P 500": "SP500",
+    "VIX Volatility Index": "VIXCLS",
     "USD Index": "DTWEXBGS",
-    "Initial Jobless Claims": "ICSA"
 }
+
+# Indicators that should be shown as year-over-year % change
+YOY_INDICATORS = {"Inflation (CPI)", "Core CPI", "Producer Price Index", "Industrial Production", "Retail Sales", "Non-Farm Payroll"}
 
 # ============================================================================
 # HELPER FUNCTIONS
@@ -93,6 +124,8 @@ def fetch_fred_data(series_id: str, start_date: str, end_date: str) -> pd.DataFr
         observations = data.get("observations", [])
         
         df = pd.DataFrame(observations)
+        if df.empty:
+            return pd.DataFrame()
         df["date"] = pd.to_datetime(df["date"])
         df["value"] = pd.to_numeric(df["value"], errors="coerce")
         df = df.dropna(subset=["value"])
@@ -202,8 +235,8 @@ def create_comparison_chart(data_dict: dict, title: str) -> go.Figure:
 st.sidebar.title("⚙️ Dashboard Settings")
 
 # Date range picker
-end_date = st.sidebar.date_input("End Date", datetime.now(), min_value=datetime(1950, 1, 1))
-start_date = st.sidebar.date_input("Start Date", datetime.now() - timedelta(days=365*30), min_value=datetime(1950, 1, 1))
+end_date = st.sidebar.date_input("End Date", datetime.now(), min_value=datetime(1950, 1, 1), max_value=datetime.now())
+start_date = st.sidebar.date_input("Start Date", datetime.now() - timedelta(days=365*30), min_value=datetime(1950, 1, 1), max_value=end_date)
 
 # Validate dates
 if start_date > end_date:
@@ -235,7 +268,7 @@ Track key U.S. economic indicators in real-time using data from the
 # TAB-BASED LAYOUT
 # ============================================================================
 # Tabs are a great way to organize related content
-tab1, tab2, tab3 = st.tabs(["📈 Key Indicators", "🔄 Comparisons", "📋 Data"])
+tab1, tab2, tab3, tab4 = st.tabs(["📈 Key Indicators", "🔄 Comparisons", "📋 Data", "📖 Data Dictionary"])
 
 # ============================================================================
 # TAB 1: KEY INDICATORS
@@ -243,63 +276,69 @@ tab1, tab2, tab3 = st.tabs(["📈 Key Indicators", "🔄 Comparisons", "📋 Dat
 with tab1:
     st.subheader("Essential Economic Indicators")
     
-    # Create columns for a grid layout
-    col1, col2, col3, col4 = st.columns(4)
-    
-    # Fetch key metrics for display in metric cards
-    indicators_to_show = ["Unemployment Rate", "Inflation (CPI)", 
-                          "Federal Funds Rate", "10-Year Treasury Yield"]
-    
-    fetch_series = {
-        "Unemployment Rate": "UNRATE",
-        "Inflation (CPI)": "CPIAUCSL",
-        "Federal Funds Rate": "FEDFUNDS",
-        "10-Year Treasury Yield": "DGS10"
+    # Organize indicators by category
+    indicator_categories = {
+        "🏢 Macroeconomic": ["GDP"],
+        "👥 Labor Market": ["Unemployment Rate", "Labor Force Participation", "Initial Jobless Claims", "Non-Farm Payroll"],
+        "💰 Inflation & Prices": ["Inflation (CPI)", "Core CPI", "Producer Price Index"],
+        "📊 Interest Rates": ["Federal Funds Rate", "10-Year Treasury Yield", "2-Year Treasury Yield", "30-Year Mortgage Rate"],
+        "🏠 Housing": ["Housing Starts", "Building Permits", "Home Prices (Case-Shiller)"],
+        "🏭 Production & Business": ["Industrial Production", "ISM Manufacturing PMI", "Retail Sales", "Consumer Disposable Income"],
+        "📈 Markets": ["S&P 500", "VIX Volatility Index", "USD Index"]
     }
     
-    cols = [col1, col2, col3, col4]
+    # Create tabs for each category
+    category_tabs = st.tabs(list(indicator_categories.keys()))
     
-    # Indicators that should be shown as year-over-year % change
-    YOY_INDICATORS = {"Inflation (CPI)"}
-
-    for i, (indicator, series_id) in enumerate(fetch_series.items()):
-        df = fetch_fred_data(series_id, start_str, end_str)
-        if indicator in YOY_INDICATORS:
-            df = compute_yoy_change(df)
-        if not df.empty:
-            latest_value = df["value"].iloc[-1]
-            latest_date = df["date"].iloc[-1].strftime("%Y-%m-%d")
-
-            label = "Inflation Rate (YoY %)" if indicator in YOY_INDICATORS else indicator
-            formatted_value = f"{latest_value:.2f}%" if indicator in YOY_INDICATORS else f"{latest_value:.2f}"
-
-            # Use st.metric to display KPIs
-            cols[i].metric(
-                label=label,
-                value=formatted_value,
-                help=f"As of {latest_date}"
-            )
+    for tab, (category, indicators) in zip(category_tabs, indicator_categories.items()):
+        with tab:
+            # Create columns for metrics grid
+            cols = st.columns(min(4, len(indicators)))
+            
+            for i, indicator in enumerate(indicators):
+                series_id = ECONOMIC_INDICATORS[indicator]
+                df = fetch_fred_data(series_id, start_str, end_str)
+                
+                if indicator in YOY_INDICATORS:
+                    df = compute_yoy_change(df)
+                
+                with cols[i % len(cols)]:
+                    if not df.empty:
+                        latest_value = df["value"].iloc[-1]
+                        latest_date = df["date"].iloc[-1].strftime("%Y-%m-%d")
+                        
+                        label = f"{indicator} (YoY %)" if indicator in YOY_INDICATORS else indicator
+                        formatted_value = f"{latest_value:.2f}%" if indicator in YOY_INDICATORS else f"{latest_value:.2f}"
+                        
+                        st.metric(
+                            label=label,
+                            value=formatted_value,
+                            help=f"As of {latest_date}"
+                        )
+                    else:
+                        st.warning(f"No data for {indicator}")
     
     st.markdown("---")
     
-    # Individual charts for main indicators
-    st.subheader("Detailed Trends")
+    # Individual charts for key indicators
+    st.subheader("📈 Detailed Trends")
     
+    # Labor Market Charts
+    st.markdown("#### 👥 Labor Market")
     chart_col1, chart_col2 = st.columns(2)
     
-    # Unemployment Rate
     with chart_col1:
         df_unemployment = fetch_fred_data("UNRATE", start_str, end_str)
         fig = create_time_series_chart(df_unemployment, "Unemployment Rate (%)", "Rate (%)")
         st.plotly_chart(fig, use_container_width=True)
     
-    # Federal Funds Rate
     with chart_col2:
-        df_fed_rate = fetch_fred_data("FEDFUNDS", start_str, end_str)
-        fig = create_time_series_chart(df_fed_rate, "Federal Funds Rate (%)", "Rate (%)")
+        df_jobless = fetch_fred_data("ICSA", start_str, end_str)
+        fig = create_time_series_chart(df_jobless, "Initial Jobless Claims", "Claims")
         st.plotly_chart(fig, use_container_width=True)
     
-    # CPI (Inflation)
+    # Prices & Inflation
+    st.markdown("#### 💰 Inflation & Interest Rates")
     chart_col3, chart_col4 = st.columns(2)
     
     with chart_col3:
@@ -308,10 +347,24 @@ with tab1:
         fig = create_time_series_chart(df_cpi, "CPI Inflation Rate (YoY %)", "% Change (YoY)")
         st.plotly_chart(fig, use_container_width=True)
     
-    # 10-Year Treasury Yield
     with chart_col4:
-        df_treasury = fetch_fred_data("DGS10", start_str, end_str)
-        fig = create_time_series_chart(df_treasury, "10-Year Treasury Yield (%)", "Rate (%)")
+        df_fed_rate = fetch_fred_data("FEDFUNDS", start_str, end_str)
+        fig = create_time_series_chart(df_fed_rate, "Federal Funds Rate (%)", "Rate (%)")
+        st.plotly_chart(fig, use_container_width=True)
+    
+    # Housing & Production
+    st.markdown("#### 🏠 Housing & 🏭 Production")
+    chart_col5, chart_col6 = st.columns(2)
+    
+    with chart_col5:
+        df_housing = fetch_fred_data("HOUST", start_str, end_str)
+        fig = create_time_series_chart(df_housing, "Housing Starts (Thousands)", "Units Started")
+        st.plotly_chart(fig, use_container_width=True)
+    
+    with chart_col6:
+        df_industrial = fetch_fred_data("INDPRO", start_str, end_str)
+        df_industrial = compute_yoy_change(df_industrial)
+        fig = create_time_series_chart(df_industrial, "Industrial Production (YoY %)", "% Change (YoY)")
         st.plotly_chart(fig, use_container_width=True)
 
 # ============================================================================
@@ -378,6 +431,252 @@ with tab3:
         )
     else:
         st.warning("No data available for this indicator")
+
+# ============================================================================
+# TAB 4: DATA DICTIONARY
+# ============================================================================
+with tab4:
+    st.subheader("📖 Data Dictionary")
+    st.markdown("Definitions and source details for every indicator in this dashboard.")
+    
+    data_dictionary = {
+        "🏢 Macroeconomic": [
+            {
+                "name": "GDP",
+                "full_name": "Real Gross Domestic Product (% Change)",
+                "series": "A191RL1Q225SBEA",
+                "frequency": "Quarterly",
+                "unit": "% Change (annualized)",
+                "definition": "The inflation-adjusted rate of change in the total value of goods and services produced in the U.S. A positive value indicates economic expansion; negative for two consecutive quarters signals a recession.",
+                "source": "U.S. Bureau of Economic Analysis"
+            },
+        ],
+        "👥 Labor Market": [
+            {
+                "name": "Unemployment Rate",
+                "full_name": "Civilian Unemployment Rate",
+                "series": "UNRATE",
+                "frequency": "Monthly",
+                "unit": "%",
+                "definition": "The percentage of the labor force that is jobless and actively seeking employment. Does not count people who have stopped looking for work.",
+                "source": "U.S. Bureau of Labor Statistics"
+            },
+            {
+                "name": "Labor Force Participation",
+                "full_name": "Civilian Labor Force Participation Rate",
+                "series": "CIVPART",
+                "frequency": "Monthly",
+                "unit": "%",
+                "definition": "The percentage of the civilian working-age population (16+) that is either employed or actively looking for work. A declining rate can mask true unemployment levels.",
+                "source": "U.S. Bureau of Labor Statistics"
+            },
+            {
+                "name": "Initial Jobless Claims",
+                "full_name": "Initial Claims for Unemployment Insurance",
+                "series": "ICSA",
+                "frequency": "Weekly",
+                "unit": "Number of persons",
+                "definition": "The number of people who filed for unemployment benefits for the first time in a given week. A leading indicator — spikes suggest a deteriorating labor market.",
+                "source": "U.S. Department of Labor"
+            },
+            {
+                "name": "Non-Farm Payroll",
+                "full_name": "All Employees: Total Nonfarm Payrolls",
+                "series": "PAYEMS",
+                "frequency": "Monthly",
+                "unit": "Thousands of persons (YoY % change displayed)",
+                "definition": "Total number of paid U.S. workers excluding farm workers, private household employees, and non-profit organization employees. One of the most closely watched labor indicators.",
+                "source": "U.S. Bureau of Labor Statistics"
+            },
+            {
+                "name": "Unemployment (25+ years)",
+                "full_name": "Unemployment Rate: 25 Years and Over",
+                "series": "LNU04000025",
+                "frequency": "Monthly",
+                "unit": "%",
+                "definition": "Unemployment rate for workers aged 25 and over. This age group has largely completed education, making this a cleaner measure of structural labor market health.",
+                "source": "U.S. Bureau of Labor Statistics"
+            },
+        ],
+        "💰 Inflation & Prices": [
+            {
+                "name": "Inflation (CPI)",
+                "full_name": "Consumer Price Index for All Urban Consumers",
+                "series": "CPIAUCSL",
+                "frequency": "Monthly",
+                "unit": "Index (YoY % change displayed)",
+                "definition": "Measures the average change over time in prices paid by urban consumers for a basket of goods and services including food, energy, and shelter. The most widely cited inflation measure.",
+                "source": "U.S. Bureau of Labor Statistics"
+            },
+            {
+                "name": "Core CPI",
+                "full_name": "CPI: All Items Less Food and Energy",
+                "series": "CPILFESL",
+                "frequency": "Monthly",
+                "unit": "Index (YoY % change displayed)",
+                "definition": "CPI excluding volatile food and energy prices. Preferred by the Federal Reserve for assessing underlying inflation trends since food and energy prices fluctuate seasonally.",
+                "source": "U.S. Bureau of Labor Statistics"
+            },
+            {
+                "name": "Producer Price Index",
+                "full_name": "Personal Consumption Expenditures Price Index",
+                "series": "PCEPI",
+                "frequency": "Monthly",
+                "unit": "Index (YoY % change displayed)",
+                "definition": "The PCE Price Index measures price changes for goods and services consumed by households. The Federal Reserve's preferred inflation gauge for setting monetary policy (2% target).",
+                "source": "U.S. Bureau of Economic Analysis"
+            },
+        ],
+        "📊 Interest Rates": [
+            {
+                "name": "Federal Funds Rate",
+                "full_name": "Effective Federal Funds Rate",
+                "series": "FEDFUNDS",
+                "frequency": "Monthly",
+                "unit": "%",
+                "definition": "The interest rate at which banks lend overnight reserves to each other. Set by the Federal Reserve's FOMC as the primary tool of U.S. monetary policy. Influences all other interest rates.",
+                "source": "Federal Reserve Board"
+            },
+            {
+                "name": "10-Year Treasury Yield",
+                "full_name": "Market Yield on U.S. Treasury Securities at 10-Year Maturity",
+                "series": "DGS10",
+                "frequency": "Daily",
+                "unit": "%",
+                "definition": "The return on investment for U.S. government 10-year bonds. Acts as the benchmark for mortgage rates and corporate borrowing. Rising yields generally signal inflation expectations or tighter financial conditions.",
+                "source": "Federal Reserve Board"
+            },
+            {
+                "name": "2-Year Treasury Yield",
+                "full_name": "Market Yield on U.S. Treasury Securities at 2-Year Maturity",
+                "series": "DGS2",
+                "frequency": "Daily",
+                "unit": "%",
+                "definition": "The return on 2-year U.S. government bonds. Highly sensitive to Federal Reserve policy expectations. When the 2-year yield exceeds the 10-year yield, the yield curve is 'inverted', historically a recession signal.",
+                "source": "Federal Reserve Board"
+            },
+            {
+                "name": "30-Year Mortgage Rate",
+                "full_name": "30-Year Fixed Rate Mortgage Average",
+                "series": "MORTGAGE30US",
+                "frequency": "Weekly",
+                "unit": "%",
+                "definition": "The average interest rate on a conventional 30-year fixed-rate mortgage in the U.S. Directly affects housing affordability and the health of the real estate market.",
+                "source": "Freddie Mac"
+            },
+        ],
+        "🏠 Housing": [
+            {
+                "name": "Housing Starts",
+                "full_name": "New Residential Construction: Housing Starts",
+                "series": "HOUST",
+                "frequency": "Monthly",
+                "unit": "Thousands of units",
+                "definition": "The number of new residential construction projects begun in a given month. A leading economic indicator reflecting consumer confidence, credit conditions, and demand for housing.",
+                "source": "U.S. Census Bureau"
+            },
+            {
+                "name": "Building Permits",
+                "full_name": "New Residential Construction: Building Permits",
+                "series": "PERMIT",
+                "frequency": "Monthly",
+                "unit": "Thousands of units",
+                "definition": "The number of permits issued for new residential construction. Leads housing starts by 1–2 months, making it a forward-looking indicator for construction and housing supply.",
+                "source": "U.S. Census Bureau"
+            },
+            {
+                "name": "Home Prices (Case-Shiller)",
+                "full_name": "S&P/Case-Shiller U.S. National Home Price Index",
+                "series": "CSUSHPISA",
+                "frequency": "Monthly",
+                "unit": "Index",
+                "definition": "Measures the change in value of residential real estate across the U.S. Based on repeat-sales transactions, it tracks the same homes over time to give a consistent picture of price appreciation.",
+                "source": "S&P Dow Jones Indices / CoreLogic"
+            },
+        ],
+        "🏭 Production & Business": [
+            {
+                "name": "Industrial Production",
+                "full_name": "Industrial Production Index",
+                "series": "INDPRO",
+                "frequency": "Monthly",
+                "unit": "Index (YoY % change displayed)",
+                "definition": "Measures the real output of manufacturing, mining, and electric and gas utilities. A broad gauge of the production sector's health; declines often precede recessions.",
+                "source": "Federal Reserve Board"
+            },
+            {
+                "name": "ISM Manufacturing PMI",
+                "full_name": "ISM Manufacturing: PMI Composite Index",
+                "series": "MMNRNJ",
+                "frequency": "Monthly",
+                "unit": "Index (50 = neutral)",
+                "definition": "A survey-based index of manufacturing activity. A reading above 50 indicates expansion; below 50 indicates contraction. One of the most timely indicators of economic momentum.",
+                "source": "Institute for Supply Management"
+            },
+            {
+                "name": "Retail Sales",
+                "full_name": "Advance Retail Sales: Retail and Food Services",
+                "series": "RSXFS",
+                "frequency": "Monthly",
+                "unit": "Millions of USD (YoY % change displayed)",
+                "definition": "Total receipts at stores that sell merchandise and related services. Since consumer spending drives ~70% of U.S. GDP, retail sales is a key gauge of economic momentum.",
+                "source": "U.S. Census Bureau"
+            },
+            {
+                "name": "Consumer Disposable Income",
+                "full_name": "Disposable Personal Income",
+                "series": "DSPI",
+                "frequency": "Monthly",
+                "unit": "Billions of USD (annualized)",
+                "definition": "The amount of money households have available to spend or save after paying taxes. A primary driver of consumer spending and a measure of household financial health.",
+                "source": "U.S. Bureau of Economic Analysis"
+            },
+        ],
+        "📈 Markets": [
+            {
+                "name": "S&P 500",
+                "full_name": "S&P 500 Stock Market Index",
+                "series": "SP500",
+                "frequency": "Daily",
+                "unit": "Index",
+                "definition": "A market-capitalization-weighted index of 500 leading U.S. publicly traded companies. Widely regarded as the best single gauge of large-cap U.S. equity market performance.",
+                "source": "S&P Dow Jones Indices via FRED"
+            },
+            {
+                "name": "VIX Volatility Index",
+                "full_name": "CBOE Volatility Index",
+                "series": "VIXCLS",
+                "frequency": "Daily",
+                "unit": "Index",
+                "definition": "Measures expected 30-day volatility of the S&P 500 derived from options prices. Known as the 'fear gauge' — readings above 20 indicate elevated uncertainty; above 30 signal significant market stress.",
+                "source": "Chicago Board Options Exchange (CBOE)"
+            },
+            {
+                "name": "USD Index",
+                "full_name": "Nominal Broad U.S. Dollar Index",
+                "series": "DTWEXBGS",
+                "frequency": "Daily",
+                "unit": "Index",
+                "definition": "Measures the value of the U.S. dollar relative to a broad basket of foreign currencies. A stronger dollar makes U.S. exports more expensive and imports cheaper, affecting trade balances and corporate earnings.",
+                "source": "Federal Reserve Board"
+            },
+        ],
+    }
+    
+    for category, indicators in data_dictionary.items():
+        st.markdown(f"### {category}")
+        for ind in indicators:
+            with st.expander(f"**{ind['name']}** — {ind['full_name']}"):
+                col_a, col_b = st.columns([3, 1])
+                with col_a:
+                    st.markdown(f"**Definition:** {ind['definition']}")
+                    st.markdown(f"**Source:** {ind['source']}")
+                with col_b:
+                    st.markdown(f"**FRED Series:** `{ind['series']}`")
+                    st.markdown(f"**Frequency:** {ind['frequency']}")
+                    st.markdown(f"**Unit:** {ind['unit']}")
+        st.markdown("---")
+
 
 # ============================================================================
 # FOOTER
