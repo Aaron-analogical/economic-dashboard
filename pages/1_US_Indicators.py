@@ -2,7 +2,7 @@
 
 import streamlit as st
 from utils.helpers import (
-    ECONOMIC_INDICATORS, YOY_INDICATORS, UNITS, render_metric,
+    ECONOMIC_INDICATORS, YOY_INDICATORS, QOQ_INDICATORS, UNITS, render_metric,
     fetch_fred_data, compute_yoy_change,
     create_time_series_chart, render_sidebar_dates, FOOTER
 )
@@ -44,7 +44,12 @@ for tab, (category, names) in zip(cat_tabs, INDICATOR_CATEGORIES.items()):
             series_id = ECONOMIC_INDICATORS[name]
             df = fetch_fred_data(series_id, start_str, end_str)
             display_df = compute_yoy_change(df) if name in YOY_INDICATORS else df
-            label = f"{name} (YoY %)" if name in YOY_INDICATORS else name
+            if name in QOQ_INDICATORS:
+                label = f"{name} (QoQ %)"
+            elif name in YOY_INDICATORS:
+                label = f"{name} (YoY %)"
+            else:
+                label = name
             category_data[name] = {"df": display_df, "label": label}
 
         # All KPI metric cards in one row at the top

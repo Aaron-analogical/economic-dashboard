@@ -49,6 +49,9 @@ YOY_INDICATORS = {
     "Industrial Production", "Retail Sales"
 }
 
+# Indicators reported natively as quarter-over-quarter % change
+QOQ_INDICATORS = {"GDP"}
+
 UNITS = {
     "GDP": "% Change (SAAR)",
     "Unemployment Rate": "Percent",
@@ -88,14 +91,19 @@ def fmt_value(val: float, indicator_name: str) -> str:
 
 
 def render_metric(name: str, label: str, df: pd.DataFrame) -> None:
-    """Render a metric card.
+    """Render a metric card with a consistent ℹ️ tooltip for all indicators.
 
-    Indicators in POSITIVE_GREEN_INDICATORS show the value in green with ▲
-    when positive, or red with ▼ when negative.
-    All other indicators use a plain st.metric card.
+    POSITIVE_GREEN_INDICATORS show the value in green (positive) or red
+    (negative) with a directional arrow. All others use the default text color.
     """
     if df.empty:
-        st.metric(label=label, value="N/A")
+        st.markdown(
+            f'<div style="padding:4px 0 8px 0;">'
+            f'<p style="margin:0 0 2px 0; font-size:0.875rem;">{label}</p>'
+            f'<p style="margin:0; font-size:2rem; font-weight:700;">N/A</p>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
         return
     val = df["value"].iloc[-1]
     date_str = df["date"].iloc[-1].strftime("%b %Y")
@@ -103,16 +111,17 @@ def render_metric(name: str, label: str, df: pd.DataFrame) -> None:
     if name in POSITIVE_GREEN_INDICATORS:
         color = "#09ab3b" if val >= 0 else "#ff2b2b"
         arrow = "▲" if val >= 0 else "▼"
-        st.markdown(
-            f"""<div style="padding:4px 0 8px 0;">
-  <p style="margin:0 0 2px 0; font-size:0.875rem;">{label}</p>
-  <p style="margin:0; font-size:2rem; font-weight:700; color:{color};">{arrow}&nbsp;{formatted}</p>
-  <p style="margin:2px 0 0 0; font-size:0.75rem; opacity:0.6;">As of {date_str}</p>
-</div>""",
-            unsafe_allow_html=True,
-        )
+        value_html = f'<span style="color:{color};">{arrow}&nbsp;{formatted}</span>'
     else:
-        st.metric(label=label, value=formatted, help=f"As of {date_str}")
+        value_html = formatted
+    st.markdown(
+        f'<div style="padding:4px 0 8px 0;">'
+        f'<p style="margin:0 0 2px 0; font-size:0.875rem;">{label}</p>'
+        f'<p style="margin:0; font-size:2rem; font-weight:700;">{value_html}</p>'
+        f'<p style="margin:2px 0 0 0; font-size:0.72rem; opacity:0.55;">As of {date_str}</p>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
 
 FOOTER = """
 <div style="text-align: center; color: gray; font-size: 12px;">
@@ -216,17 +225,10 @@ def render_sidebar_dates():
         min_value=datetime(1950, 1, 1), max_value=datetime.now()
     )
     start_date = st.sidebar.date_input(
-        "Start Date", datetime.now() - timedelta(days=365 * 21),
+        "Start Date", datetime.now() - timedelta(days=365 * 11),
         min_value=datetime(1950, 1, 1), max_value=end_date
     )
     if start_date > end_date:
         st.error("Start date must be before end date")
         st.stop()
-    st.sidebar.markdown("---")
-    st.sidebar.markdown("""
-### Dashboard Info
-- Data Source: **Federal Reserve Economic Data (FRED)**
-- Update Frequency: Varies by series
-- Last Update: Cached for 1 hour
-""")
     return start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")
