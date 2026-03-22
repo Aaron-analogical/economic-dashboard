@@ -79,7 +79,7 @@ This project teaches you:
 6. **Run the app**
 
    ```bash
-   streamlit run app.py
+   streamlit run Home.py
    ```
 
 The app will open in your browser at `http://localhost:8501`
