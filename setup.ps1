@@ -42,6 +42,6 @@ Write-Host ""
 Write-Host "Next steps:" -ForegroundColor Cyan
 Write-Host "1. Get a FRED API key at: https://fred.stlouisfed.org/docs/api/" -ForegroundColor White
 Write-Host "2. Edit .env and add your API key" -ForegroundColor White
-Write-Host "3. Run: streamlit run app.py" -ForegroundColor White
+Write-Host "3. Run: streamlit run Home.py" -ForegroundColor White
 Write-Host ""
 Write-Host "App will open at: http://localhost:8501" -ForegroundColor Cyan
