@@ -1,0 +1,32 @@
+name: Seed Economic Data
+
+on:
+  # Run on a schedule — every Sunday at 06:00 UTC
+  schedule:
+    - cron: "0 6 * * 0"
+
+  # Allow manual trigger from the GitHub Actions UI
+  workflow_dispatch:
+
+jobs:
+  seed:
+    # IMPORTANT: must be self-hosted because PostgreSQL is on localhost.
+    # See doc/REUSABLE_PATTERN.md — "Scheduling" section for setup instructions.
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Activate venv and seed database
+        shell: pwsh
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          .\venv\Scripts\Activate.ps1
+          python seed_db.py
