@@ -1,12 +1,87 @@
-# Macroeconomic Dashboard with Streamlit & FRED Data
+# US Economic Dashboard
 
-A professional macroeconomic dashboard built with Streamlit that fetches real-time economic data from the Federal Reserve Economic Data (FRED) API.
+A macroeconomic dashboard built with Streamlit, pulling live data from the Federal Reserve FRED API. Covers 23 indicators across labour markets, inflation, interest rates, housing, and financial markets.
 
-## Learning Objectives
+Data is persisted to a PostgreSQL database (Neon) via a daily GitHub Actions pipeline, enabling historical analysis and downstream reporting in Power BI.
 
-This project teaches you:
+## Stack
 
-### Core Streamlit Concepts
+| Layer | Technology |
+|---|---|
+| Frontend | Streamlit, Plotly |
+| Data source | FRED API (Federal Reserve) |
+| Database | PostgreSQL (Neon serverless) |
+| Pipeline | GitHub Actions (daily, `ubuntu-latest`) |
+| BI | Power BI via PostgreSQL connector |
+
+## Features
+
+- **US Indicators** — Metric cards and time-series charts for key macro indicators
+- **Comparisons** — Multi-indicator normalised view (indexed to 100)
+- **Data Export** — Raw table view with CSV download
+- **Data Dictionary** — Indicator definitions and FRED series references
+
+## Setup
+
+### Prerequisites
+
+- Python 3.9+
+- FRED API key — [register free at fred.stlouisfed.org](https://fred.stlouisfed.org/)
+
+### Installation
+
+```bash
+git clone https://github.com/Aaron-analogical/economic-dashboard.git
+cd economic-dashboard
+python -m venv venv
+venv\Scripts\activate        # Windows
+pip install -r requirements.txt
+```
+
+Create a `.env` file at the project root:
+
+```dotenv
+FRED_API_KEY=your_key_here
+
+DB_HOST=your_neon_host
+DB_PORT=5432
+DB_NAME=neondb
+DB_USER=your_user
+DB_PASSWORD=your_password
+DB_SSLMODE=require
+```
+
+### Run
+
+```bash
+streamlit run Home.py
+```
+
+### Seed the database
+
+```bash
+python seed_db.py
+```
+
+Safe to re-run — uses upsert to avoid duplicates.
+
+## Architecture
+
+```
+FRED API → utils/helpers.py → seed_db.py → Neon PostgreSQL → Power BI
+                                                    ↑
+                                         GitHub Actions (daily 07:00 UTC)
+```
+
+- `utils/helpers.py` — FRED API client, indicator definitions
+- `utils/db.py` — PostgreSQL connection and batch upsert
+- `seed_db.py` — Standalone pipeline script
+- `.github/workflows/seed.yml` — Scheduled GitHub Actions workflow
+
+## Indicators
+
+23 series covering: GDP, unemployment, CPI, core CPI, PPI, Fed funds rate, Treasury yields, mortgage rates, housing starts, building permits, Case-Shiller home prices, industrial production, ISM PMI, retail sales, disposable income, S&P 500, VIX, and USD index.
+
 
 - **Page Configuration**: `st.set_page_config()` for setting page title, icon, and layout
 - **Layout Components**: Columns and tabs for organizing content
