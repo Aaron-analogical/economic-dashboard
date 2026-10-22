@@ -78,17 +78,7 @@ cultureInfo en-US
 			      "State": "Generated",
 			      "Terms": [
 			        {
-			          "Latest": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        },
-			        {
-			          "Unemployment rate (%)": {
+			          "CPI inflation (YoY %)": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",
@@ -108,16 +98,6 @@ cultureInfo en-US
 			          }
 			        },
 			        {
-			          "Core CPI (YoY %)": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        },
-			        {
 			          "10Y Treasury (%)": {
 			            "State": "Suggested",
 			            "Source": {
@@ -128,7 +108,7 @@ cultureInfo en-US
 			          }
 			        },
 			        {
-			          "Real GDP growth (% SAAR)": {
+			          "Unemployment rate (%)": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",
@@ -138,7 +118,7 @@ cultureInfo en-US
 			          }
 			        },
 			        {
-			          "CPI inflation (YoY %)": {
+			          "Core CPI (YoY %)": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",
@@ -148,7 +128,27 @@ cultureInfo en-US
 			          }
 			        },
 			        {
-			          "PPI (YoY %)": {
+			          "Latest": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Real GDP growth (%)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "CPI (YoY %)": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",
@@ -168,7 +168,7 @@ cultureInfo en-US
 			          }
 			        },
 			        {
-			          "CPI (YoY %)": {
+			          "PPI (YoY %)": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",
@@ -251,6 +251,16 @@ cultureInfo en-US
 			      },
 			      "State": "Generated",
 			      "Terms": [
+			        {
+			          "Period": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
 			        {
 			          "Date": {
 			            "State": "Suggested",
