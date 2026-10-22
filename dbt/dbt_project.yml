@@ -1,0 +1,36 @@
+name: economic_dw
+version: "1.0.0"
+config-version: 2
+profile: economic_dw
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  economic_dw:
+    staging:
+      +materialized: view
+      +schema: staging
+    intermediate:
+      +materialized: view
+      +schema: staging
+    marts:
+      +materialized: table
+      +schema: analytics
+
+seeds:
+  economic_dw:
+    +schema: analytics
+    indicators:
+      +column_types:
+        series_id: text
+        indicator_name: text
+        category: text
+        unit: text
+        frequency: text
+        transform: text
+        display_unit: text

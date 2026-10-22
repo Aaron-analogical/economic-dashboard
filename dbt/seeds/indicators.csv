@@ -1,0 +1,24 @@
+series_id,indicator_name,category,unit,frequency,transform,display_unit
+A191RL1Q225SBEA,Real GDP Growth,Macroeconomic,% Change (SAAR),Q,level,% Change (SAAR)
+UNRATE,Unemployment Rate,Labor Market,Percent,M,level,Percent
+CIVPART,Labor Force Participation Rate,Labor Market,Percent,M,level,Percent
+ICSA,Initial Jobless Claims,Labor Market,Number,W,level,Number
+PAYEMS,Nonfarm Payrolls,Labor Market,Thousands of Persons,M,level,Thousands of Persons
+LNU04000025,Unemployment Rate (Men 20+),Labor Market,Percent,M,level,Percent
+CPIAUCSL,CPI,Inflation & Prices,Index 1982-1984=100,M,yoy,YoY %
+CPILFESL,Core CPI,Inflation & Prices,Index 1982-1984=100,M,yoy,YoY %
+PCEPI,PCE Price Index,Inflation & Prices,Index 2017=100,M,yoy,YoY %
+PPIACO,Producer Price Index,Inflation & Prices,Index 1982=100,M,yoy,YoY %
+FEDFUNDS,Federal Funds Rate,Interest Rates,Percent,M,level,Percent
+DGS10,10-Year Treasury Yield,Interest Rates,Percent,D,level,Percent
+DGS2,2-Year Treasury Yield,Interest Rates,Percent,D,level,Percent
+MORTGAGE30US,30-Year Mortgage Rate,Interest Rates,Percent,W,level,Percent
+HOUST,Housing Starts,Housing,Thousands of Units,M,level,Thousands of Units
+PERMIT,Building Permits,Housing,Thousands of Units,M,level,Thousands of Units
+CSUSHPISA,Case-Shiller Home Price Index,Housing,Index Jan 2000=100,M,yoy,YoY %
+INDPRO,Industrial Production,Production & Business,Index 2017=100,M,yoy,YoY %
+RSXFS,Retail Sales,Production & Business,Millions of $,M,yoy,YoY %
+DSPI,Disposable Personal Income,Production & Business,Billions of $,M,level,Billions of $
+SP500,S&P 500,Markets,Index,D,level,Index
+VIXCLS,VIX Volatility Index,Markets,Index,D,level,Index
+DTWEXBGS,Broad USD Index,Markets,Index Jan 2006=100,D,level,Index

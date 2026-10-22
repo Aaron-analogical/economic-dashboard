@@ -1,0 +1,98 @@
+version: 2
+
+models:
+  - name: dim_indicator
+    description: One row per FRED series with business metadata and data coverage.
+    columns:
+      - name: series_id
+        description: FRED series identifier (primary key).
+        data_tests: [unique, not_null]
+      - name: indicator_name
+        data_tests: [unique, not_null]
+      - name: category
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["Macroeconomic", "Labor Market", "Inflation & Prices", "Interest Rates", "Housing", "Production & Business", "Markets"]
+      - name: frequency
+        description: Native FRED frequency (D, W, M, Q).
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["D", "W", "M", "Q"]
+      - name: transform
+        description: "`yoy` when the indicator is read as a year-over-year % change (price indices, volumes), `level` otherwise."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["level", "yoy"]
+      - name: display_unit
+        description: Unit of `display_value` in `fct_indicator_monthly`.
+      - name: n_observations
+        description: Non-null observations available for the series.
+
+  - name: dim_date
+    description: Daily calendar from 2000-01-01 to the end of the current year.
+    columns:
+      - name: date
+        data_tests: [unique, not_null]
+
+  - name: fct_observations
+    description: Observations at each series' native frequency. Use for daily market charts.
+    columns:
+      - name: series_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_indicator')
+                field: series_id
+      - name: observation_date
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [series_id, observation_date]
+
+  - name: fct_indicator_monthly
+    description: >
+      One row per series and month. Daily and weekly series are averaged over
+      the month. Includes period-over-period and year-over-year changes.
+    columns:
+      - name: series_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_indicator')
+                field: series_id
+      - name: month_date
+        description: First day of the month.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date
+      - name: value
+        description: Monthly value (average of the month for daily and weekly series).
+        data_tests: [not_null]
+      - name: prev_period_pct
+        description: "% change vs the previous available period (previous month, or previous quarter for GDP)."
+      - name: yoy_pct
+        description: "% change vs the same month one year earlier."
+      - name: yoy_change
+        description: Absolute change vs the same month one year earlier (use for rates).
+      - name: display_value
+        description: Headline value as usually reported, `yoy_pct` when `transform = yoy`, `value` otherwise.
+      - name: n_observations
+        description: Number of native observations averaged into the month.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [series_id, month_date]

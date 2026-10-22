@@ -1,0 +1,10 @@
+version: 2
+
+seeds:
+  - name: indicators
+    description: >
+      Indicator catalogue: the list of FRED series the extractor loads, with
+      business labels. Edit this file to add or remove an indicator.
+    columns:
+      - name: series_id
+        data_tests: [unique, not_null]

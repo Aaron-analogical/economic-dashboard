@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: stg_fred__observations
+    description: FRED observations with missing values removed and columns renamed.
+    columns:
+      - name: series_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('indicators')
+                field: series_id
+      - name: observation_date
+        data_tests: [not_null]
+      - name: value
+        data_tests: [not_null]
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [series_id, observation_date]
