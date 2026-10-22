@@ -1,6 +1,6 @@
 # Quick Setup Script for Windows PowerShell
 
-Write-Host "Setting up Streamlit Dashboard..." -ForegroundColor Green
+Write-Host "Setting up US Economic Data Warehouse..." -ForegroundColor Green
 
 # Check if Python is installed
 if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
@@ -23,8 +23,15 @@ Write-Host "Upgrading pip..." -ForegroundColor Cyan
 python -m pip install --upgrade pip setuptools wheel
 
 # Install requirements
-Write-Host "Installing dependencies..." -ForegroundColor Cyan
+Write-Host "Installing Streamlit dependencies..." -ForegroundColor Cyan
 pip install -r requirements.txt
+deactivate
+
+# Pipeline environment (dbt and Streamlit need conflicting protobuf versions)
+Write-Host "Creating pipeline virtual environment (ingestion + dbt)..." -ForegroundColor Cyan
+python -m venv .venv-pipeline
+& ".\.venv-pipeline\Scripts\python.exe" -m pip install --upgrade pip
+& ".\.venv-pipeline\Scripts\python.exe" -m pip install -r requirements-pipeline.txt
 
 # Create .env file from .env.example
 if (-not (Test-Path ".env")) {
@@ -42,7 +49,7 @@ Write-Host ""
 Write-Host "Next steps:" -ForegroundColor Cyan
 Write-Host "1. Get a FRED API key at: https://fred.stlouisfed.org/docs/api/" -ForegroundColor White
 Write-Host "2. Edit .env with your FRED API key and database credentials" -ForegroundColor White
-Write-Host "3. Run: python seed_db.py  (initial database seed)" -ForegroundColor White
-Write-Host "4. Run: streamlit run Home.py" -ForegroundColor White
-Write-Host ""
-Write-Host "App will open at: http://localhost:8501" -ForegroundColor Cyan
+Write-Host "3. Load raw data:  .\.venv-pipeline\Scripts\python.exe -m ingestion.load_raw" -ForegroundColor White
+Write-Host "4. Build models:   cd dbt; dbt deps --profiles-dir .; dbt build --profiles-dir .  (see README for env vars)" -ForegroundColor White
+Write-Host "5. Open powerbi\EconomicDashboard.pbip in Power BI Desktop and set PgHost / PgDatabase" -ForegroundColor White
+Write-Host "6. Optional Streamlit app: .env\Scripts\streamlit.exe run Home.py" -ForegroundColor White
