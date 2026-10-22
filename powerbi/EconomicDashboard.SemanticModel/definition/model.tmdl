@@ -1,0 +1,20 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["PgHost","PgDatabase","dim_indicator","dim_date","fct_indicator_monthly","fct_observations","_Measures"]
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table _Measures
+ref table dim_indicator
+ref table dim_date
+ref table fct_indicator_monthly
+ref table fct_observations

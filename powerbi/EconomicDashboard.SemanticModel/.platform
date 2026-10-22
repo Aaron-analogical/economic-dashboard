@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "EconomicDashboard"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "859268f4-0eed-40ba-8c5e-7d5738c60d6d"
+  }
+}

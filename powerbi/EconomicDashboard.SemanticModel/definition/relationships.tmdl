@@ -1,0 +1,15 @@
+relationship 3748af01-2054-4f0e-8964-f2de7a77f2b7
+	fromColumn: fct_indicator_monthly.series_id
+	toColumn: dim_indicator.series_id
+
+relationship 699e99d2-78cd-46a1-9d65-350a15815032
+	fromColumn: fct_indicator_monthly.month_date
+	toColumn: dim_date.date
+
+relationship da022338-4eb5-45f7-a3f0-376f13dc730a
+	fromColumn: fct_observations.series_id
+	toColumn: dim_indicator.series_id
+
+relationship 579b40d4-b275-479b-ab13-93c7e7d7ce4c
+	fromColumn: fct_observations.observation_date
+	toColumn: dim_date.date

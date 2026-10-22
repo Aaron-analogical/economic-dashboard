@@ -1,0 +1,114 @@
+table _Measures
+	lineageTag: 2f66b715-e212-4c45-9485-72540c94cc4d
+
+	/// Headline monthly value: YoY % for price indices and volumes, level otherwise.
+	measure 'Display Value' = AVERAGE ( fct_indicator_monthly[display_value] )
+		formatString: #,0.00
+		lineageTag: c5f009ae-3f76-4169-9964-82a632cf0991
+
+	/// Value at the series' native frequency (daily, weekly, monthly, quarterly).
+	measure 'Native Value' = AVERAGE ( fct_observations[value] )
+		formatString: #,0.00
+		lineageTag: 3cae1520-ba60-4ffc-8fcb-8b373b7c5956
+
+	/// Most recent month with data in the current filter context.
+	measure 'Latest Month' = MAX ( fct_indicator_monthly[month_date] )
+		formatString: mmm yyyy
+		lineageTag: 42ae48d2-b9d5-485b-a97a-dc90db1d58ed
+
+	/// Display value of the latest available month for a single indicator.
+	measure 'Latest Value' =
+			VAR _latest = [Latest Month]
+			RETURN
+			    IF (
+			        HASONEVALUE ( dim_indicator[series_id] ),
+			        CALCULATE ( [Display Value], fct_indicator_monthly[month_date] = _latest )
+			    )
+		formatString: #,0.00
+		lineageTag: dabef20a-ba78-4aee-ad1f-656bee975874
+
+	/// Display value of the period before the latest one.
+	measure 'Previous Value' =
+			VAR _latest = [Latest Month]
+			VAR _previous =
+			    CALCULATE (
+			        MAX ( fct_indicator_monthly[month_date] ),
+			        fct_indicator_monthly[month_date] < _latest
+			    )
+			RETURN
+			    IF (
+			        HASONEVALUE ( dim_indicator[series_id] ),
+			        CALCULATE ( [Display Value], fct_indicator_monthly[month_date] = _previous )
+			    )
+		formatString: #,0.00
+		lineageTag: f7c20c8d-d16a-49f8-872f-b70bdbce940f
+
+	/// Change of the display value vs the previous period.
+	measure 'Change vs Previous' = [Latest Value] - [Previous Value]
+		formatString: +#,0.00;-#,0.00;0.00
+		lineageTag: bc02a641-4e4a-4ad1-9066-fa789293b88b
+
+	/// Year-over-year % change of the underlying value for the latest month.
+	measure 'Latest YoY %' =
+			VAR _latest = [Latest Month]
+			RETURN
+			    IF (
+			        HASONEVALUE ( dim_indicator[series_id] ),
+			        CALCULATE ( AVERAGE ( fct_indicator_monthly[yoy_pct] ), fct_indicator_monthly[month_date] = _latest )
+			    )
+		formatString: +#,0.00;-#,0.00;0.00
+		lineageTag: 4acd0a66-1ef1-46b0-bce3-028b751a6ab6
+
+	/// 10-year minus 2-year Treasury yield (percentage points). Negative = inverted curve.
+	measure '10Y-2Y Spread' =
+			CALCULATE (
+			    AVERAGE ( fct_indicator_monthly[value] ),
+			    REMOVEFILTERS ( dim_indicator ),
+			    dim_indicator[series_id] = "DGS10"
+			)
+			    - CALCULATE (
+			        AVERAGE ( fct_indicator_monthly[value] ),
+			        REMOVEFILTERS ( dim_indicator ),
+			        dim_indicator[series_id] = "DGS2"
+			    )
+		formatString: +#,0.00;-#,0.00;0.00
+		lineageTag: b1dbc105-21d3-4815-b06f-5bc73a880211
+
+	/// Effective Fed Funds rate minus CPI inflation (YoY %).
+	measure 'Real Fed Funds Rate' =
+			CALCULATE (
+			    AVERAGE ( fct_indicator_monthly[value] ),
+			    REMOVEFILTERS ( dim_indicator ),
+			    dim_indicator[series_id] = "FEDFUNDS"
+			)
+			    - CALCULATE (
+			        AVERAGE ( fct_indicator_monthly[display_value] ),
+			        REMOVEFILTERS ( dim_indicator ),
+			        dim_indicator[series_id] = "CPIAUCSL"
+			    )
+		formatString: +#,0.00;-#,0.00;0.00
+		lineageTag: b1b2a6f0-1afa-499a-af72-2c64fcab3be5
+
+	/// Unit of the selected indicator, for dynamic titles.
+	measure 'Selected Unit' = SELECTEDVALUE ( dim_indicator[display_unit] )
+		lineageTag: 9dfe7ad0-732e-483a-a106-46ee387ff033
+
+	/// Most recent observation date across the selected indicators.
+	measure 'Last Observation' = MAX ( dim_indicator[last_observation_date] )
+		formatString: yyyy-mm-dd
+		lineageTag: 9500ee1b-abd1-43b9-a306-ee8379e883f0
+
+	column Dummy
+		dataType: string
+		isHidden
+		lineageTag: ffbf34f8-dcb9-4f51-a3b3-8a5623c7c992
+		summarizeBy: none
+		sourceColumn: Dummy
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = m
+		mode: import
+		source = #table(type table [Dummy = text], {})
+
+	annotation PBI_ResultType = Table

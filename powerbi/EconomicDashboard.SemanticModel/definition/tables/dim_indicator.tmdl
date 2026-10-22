@@ -1,0 +1,122 @@
+table dim_indicator
+	lineageTag: 2d515c38-b56c-4044-b198-8c437aa321a1
+
+	column series_id
+		dataType: string
+		lineageTag: 77593c0e-da79-43ef-abdf-745f551bbb51
+		summarizeBy: none
+		sourceColumn: series_id
+
+		annotation SummarizationSetBy = User
+
+	column indicator_name
+		dataType: string
+		lineageTag: eec5f7a3-04a0-4215-b2e7-4a94c039c40a
+		summarizeBy: none
+		sourceColumn: indicator_name
+
+		annotation SummarizationSetBy = User
+
+	column category
+		dataType: string
+		lineageTag: 3ad57348-4d69-4d99-81bd-45b3b2e32349
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = User
+
+	column unit
+		dataType: string
+		lineageTag: 80c480c5-9eea-46b8-88c4-1c3583c45f87
+		summarizeBy: none
+		sourceColumn: unit
+
+		annotation SummarizationSetBy = User
+
+	column display_unit
+		dataType: string
+		lineageTag: d61627eb-ab55-41c5-b8ab-156ebfbc3935
+		summarizeBy: none
+		sourceColumn: display_unit
+
+		annotation SummarizationSetBy = User
+
+	column frequency
+		dataType: string
+		lineageTag: e2dda891-1b3c-4c1b-a94e-a686a50d8230
+		summarizeBy: none
+		sourceColumn: frequency
+
+		annotation SummarizationSetBy = User
+
+	column frequency_name
+		dataType: string
+		lineageTag: d02b5cf1-5e44-48b2-b9fb-fa9b825ae1de
+		summarizeBy: none
+		sourceColumn: frequency_name
+
+		annotation SummarizationSetBy = User
+
+	column transform
+		dataType: string
+		lineageTag: ea5af0a6-7132-4d0c-a79f-3857e9a5a1d7
+		summarizeBy: none
+		sourceColumn: transform
+
+		annotation SummarizationSetBy = User
+
+	column fred_url
+		dataType: string
+		dataCategory: WebUrl
+		lineageTag: 597db561-cdc5-481f-b2b4-442fb13827c2
+		summarizeBy: none
+		sourceColumn: fred_url
+
+		annotation SummarizationSetBy = User
+
+	column first_observation_date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 8f4f3831-386f-494a-af49-f849ce65cb37
+		summarizeBy: none
+		sourceColumn: first_observation_date
+
+		annotation SummarizationSetBy = User
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column last_observation_date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 1be4e03f-99e2-45be-b109-3ee74ea6d0b8
+		summarizeBy: none
+		sourceColumn: last_observation_date
+
+		annotation SummarizationSetBy = User
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column n_observations
+		dataType: int64
+		formatString: #,0
+		lineageTag: e88bb3fc-d7bc-4b45-b591-2e5131184455
+		summarizeBy: sum
+		sourceColumn: n_observations
+
+		annotation SummarizationSetBy = User
+
+	partition dim_indicator = m
+		mode: import
+		source = ```
+				let
+				    Source = PostgreSQL.Database(PgHost, PgDatabase),
+				    Navigation = Source{[Schema = "analytics", Item = "dim_indicator"]}[Data],
+				    SelectedColumns = Table.SelectColumns(Navigation, {"series_id", "indicator_name", "category", "unit", "display_unit", "frequency", "frequency_name", "transform", "fred_url", "first_observation_date", "last_observation_date", "n_observations"}),
+				    Typed = Table.TransformColumnTypes(SelectedColumns, {{"series_id", type text}, {"indicator_name", type text}, {"category", type text}, {"unit", type text}, {"display_unit", type text}, {"frequency", type text}, {"frequency_name", type text}, {"transform", type text}, {"fred_url", type text}, {"first_observation_date", type date}, {"last_observation_date", type date}, {"n_observations", Int64.Type}})
+				in
+				    Typed
+				```
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

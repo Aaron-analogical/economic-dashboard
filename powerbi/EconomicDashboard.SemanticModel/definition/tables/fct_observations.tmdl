@@ -1,0 +1,48 @@
+table fct_observations
+	lineageTag: e1877c7d-3f63-47b5-a1b9-cccdfd5adada
+
+	column series_id
+		dataType: string
+		isHidden
+		lineageTag: 8bb126ef-ecc7-488b-8b3c-64bd31733faf
+		summarizeBy: none
+		sourceColumn: series_id
+
+		annotation SummarizationSetBy = User
+
+	column observation_date
+		dataType: dateTime
+		isHidden
+		formatString: yyyy-mm-dd
+		lineageTag: 9a5ca174-bf73-48d3-84a9-6c11da6760fa
+		summarizeBy: none
+		sourceColumn: observation_date
+
+		annotation SummarizationSetBy = User
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column value
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 930fb349-d72b-40b6-829c-25f0affd51e6
+		summarizeBy: none
+		sourceColumn: value
+
+		annotation SummarizationSetBy = User
+
+	partition fct_observations = m
+		mode: import
+		source = ```
+				let
+				    Source = PostgreSQL.Database(PgHost, PgDatabase),
+				    Navigation = Source{[Schema = "analytics", Item = "fct_observations"]}[Data],
+				    SelectedColumns = Table.SelectColumns(Navigation, {"series_id", "observation_date", "value"}),
+				    Typed = Table.TransformColumnTypes(SelectedColumns, {{"series_id", type text}, {"observation_date", type date}, {"value", type number}})
+				in
+				    Typed
+				```
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
