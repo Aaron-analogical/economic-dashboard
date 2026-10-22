@@ -67,8 +67,8 @@ table dim_indicator
 
 	column fred_url
 		dataType: string
-		dataCategory: WebUrl
 		lineageTag: 597db561-cdc5-481f-b2b4-442fb13827c2
+		dataCategory: WebUrl
 		summarizeBy: none
 		sourceColumn: fred_url
 
@@ -107,7 +107,7 @@ table dim_indicator
 
 	partition dim_indicator = m
 		mode: import
-		source = ```
+		source =
 				let
 				    Source = PostgreSQL.Database(PgHost, PgDatabase),
 				    Navigation = Source{[Schema = "analytics", Item = "dim_indicator"]}[Data],
@@ -115,8 +115,8 @@ table dim_indicator
 				    Typed = Table.TransformColumnTypes(SelectedColumns, {{"series_id", type text}, {"indicator_name", type text}, {"category", type text}, {"unit", type text}, {"display_unit", type text}, {"frequency", type text}, {"frequency_name", type text}, {"transform", type text}, {"fred_url", type text}, {"first_observation_date", type date}, {"last_observation_date", type date}, {"n_observations", Int64.Type}})
 				in
 				    Typed
-				```
 
 	annotation PBI_NavigationStepName = Navigation
 
 	annotation PBI_ResultType = Table
+

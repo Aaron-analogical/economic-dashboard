@@ -4,8 +4,13 @@ expression PgHost = "your-endpoint.neon.tech" meta [IsParameterQuery=true, Type=
 
 	annotation PBI_ResultType = Text
 
+	annotation PBI_NavigationStepName = Navigation
+
 /// Database holding the dbt marts (schema analytics).
 expression PgDatabase = "neondb" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
 	lineageTag: 00717f4d-f559-4789-9cb1-b13afc58d3d4
 
 	annotation PBI_ResultType = Text
+
+	annotation PBI_NavigationStepName = Navigation
+

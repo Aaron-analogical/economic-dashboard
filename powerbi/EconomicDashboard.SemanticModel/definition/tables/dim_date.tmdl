@@ -1,6 +1,6 @@
 table dim_date
-	dataCategory: Time
 	lineageTag: 1ea88033-bc5d-47b4-8c6f-ad57de39891c
+	dataCategory: Time
 
 	column date
 		dataType: dateTime
@@ -53,8 +53,8 @@ table dim_date
 		dataType: string
 		lineageTag: 1e391347-d4a3-48d3-a8ca-a756b202e20d
 		summarizeBy: none
-		sortByColumn: month
 		sourceColumn: month_short
+		sortByColumn: month
 
 		annotation SummarizationSetBy = User
 
@@ -96,7 +96,7 @@ table dim_date
 
 	partition dim_date = m
 		mode: import
-		source = ```
+		source =
 				let
 				    Source = PostgreSQL.Database(PgHost, PgDatabase),
 				    Navigation = Source{[Schema = "analytics", Item = "dim_date"]}[Data],
@@ -104,8 +104,8 @@ table dim_date
 				    Typed = Table.TransformColumnTypes(SelectedColumns, {{"date", type date}, {"year", Int64.Type}, {"quarter", Int64.Type}, {"quarter_label", type text}, {"month", Int64.Type}, {"month_short", type text}, {"year_month", type text}, {"month_start", type date}, {"day_of_week", Int64.Type}, {"is_weekend", type logical}})
 				in
 				    Typed
-				```
 
 	annotation PBI_NavigationStepName = Navigation
 
 	annotation PBI_ResultType = Table
+

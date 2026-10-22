@@ -1,0 +1,87 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1172.9540208623362,
+            "y": 104.75627320605491
+          },
+          "nodeIndex": "_Measures",
+          "nodeLineageTag": "2f66b715-e212-4c45-9485-72540c94cc4d",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 771.77026203170635,
+            "y": 182.75840060695361
+          },
+          "nodeIndex": "dim_date",
+          "nodeLineageTag": "1ea88033-bc5d-47b4-8c6f-ad57de39891c",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 275.02569922852427
+          },
+          "nodeIndex": "dim_indicator",
+          "nodeLineageTag": "2d515c38-b56c-4044-b198-8c437aa321a1",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 250.01705454270234,
+            "y": -50
+          },
+          "nodeIndex": "fct_indicator_monthly",
+          "nodeLineageTag": "f329de02-08da-4454-97e1-c10e319feee1",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 407.09963472731181,
+            "y": 464.6401392980402
+          },
+          "nodeIndex": "fct_observations",
+          "nodeLineageTag": "e1877c7d-3f63-47b5-a1b9-cccdfd5adada",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 79.553182037699813,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

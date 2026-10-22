@@ -33,7 +33,7 @@ table fct_observations
 
 	partition fct_observations = m
 		mode: import
-		source = ```
+		source =
 				let
 				    Source = PostgreSQL.Database(PgHost, PgDatabase),
 				    Navigation = Source{[Schema = "analytics", Item = "fct_observations"]}[Data],
@@ -41,8 +41,8 @@ table fct_observations
 				    Typed = Table.TransformColumnTypes(SelectedColumns, {{"series_id", type text}, {"observation_date", type date}, {"value", type number}})
 				in
 				    Typed
-				```
 
 	annotation PBI_NavigationStepName = Navigation
 
 	annotation PBI_ResultType = Table
+

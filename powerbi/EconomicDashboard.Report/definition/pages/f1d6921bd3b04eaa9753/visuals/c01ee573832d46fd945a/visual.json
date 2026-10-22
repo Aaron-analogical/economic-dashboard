@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "c01ee573832d46fd945a",
+  "position": {
+    "x": 24,
+    "y": 54,
+    "z": 1001,
+    "height": 28,
+    "width": 820,
+    "tabOrder": 1001
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Construction activity and home prices",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "fontFamily": "Segoe UI",
+                      "color": "#605E5C"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

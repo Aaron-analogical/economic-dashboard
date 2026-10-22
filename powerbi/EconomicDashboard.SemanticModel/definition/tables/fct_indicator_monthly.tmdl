@@ -107,7 +107,7 @@ table fct_indicator_monthly
 
 	partition fct_indicator_monthly = m
 		mode: import
-		source = ```
+		source =
 				let
 				    Source = PostgreSQL.Database(PgHost, PgDatabase),
 				    Navigation = Source{[Schema = "analytics", Item = "fct_indicator_monthly"]}[Data],
@@ -115,8 +115,8 @@ table fct_indicator_monthly
 				    Typed = Table.TransformColumnTypes(SelectedColumns, {{"series_id", type text}, {"month_date", type date}, {"value", type number}, {"value_prev_period", type number}, {"value_year_ago", type number}, {"prev_period_pct", type number}, {"yoy_pct", type number}, {"yoy_change", type number}, {"display_value", type number}, {"n_observations", Int64.Type}, {"last_observation_date", type date}})
 				in
 				    Typed
-				```
 
 	annotation PBI_NavigationStepName = Navigation
 
 	annotation PBI_ResultType = Table
+

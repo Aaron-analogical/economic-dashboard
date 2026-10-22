@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "3e46b400dc7949d5a9bf",
+  "position": {
+    "x": 24,
+    "y": 54,
+    "z": 1001,
+    "height": 28,
+    "width": 820,
+    "tabOrder": 1001
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "GDP, industrial production, retail sales and income",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "fontFamily": "Segoe UI",
+                      "color": "#605E5C"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

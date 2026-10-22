@@ -112,3 +112,6 @@ table _Measures
 		source = #table(type table [Dummy = text], {})
 
 	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+
