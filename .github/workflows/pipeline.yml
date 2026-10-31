@@ -39,7 +39,14 @@ jobs:
         run: pip install -r requirements-pipeline.txt
 
       - name: Extract & load FRED data
+        id: fred
+        continue-on-error: true
         run: python -m ingestion.load_raw
+
+      - name: Extract & load World Bank data
+        id: worldbank
+        continue-on-error: true
+        run: python -m ingestion.load_worldbank
 
       - name: dbt deps
         working-directory: dbt
@@ -52,3 +59,11 @@ jobs:
       - name: dbt build (seed, run, test)
         working-directory: dbt
         run: dbt build --target prod
+
+      # Loaders run with continue-on-error so one failing API does not block
+      # the other source or dbt; fail the job here so the failure stays visible.
+      - name: Fail if an extractor failed
+        if: steps.fred.outcome == 'failure' || steps.worldbank.outcome == 'failure'
+        run: |
+          echo "FRED: ${{ steps.fred.outcome }} / World Bank: ${{ steps.worldbank.outcome }}"
+          exit 1
