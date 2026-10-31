@@ -1,0 +1,236 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "04c8265895ac14a93457",
+  "position": {
+    "x": 196,
+    "y": 216,
+    "z": 10,
+    "height": 234.0,
+    "width": 1064,
+    "tabOrder": 10
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_source_freshness"
+                    }
+                  },
+                  "Property": "source_name"
+                }
+              },
+              "queryRef": "rpt_source_freshness.source_name",
+              "nativeQueryRef": "Source",
+              "displayName": "Source"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_source_freshness"
+                    }
+                  },
+                  "Property": "freshness_status"
+                }
+              },
+              "queryRef": "rpt_source_freshness.freshness_status",
+              "nativeQueryRef": "Freshness",
+              "displayName": "Freshness"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_source_freshness"
+                    }
+                  },
+                  "Property": "n_series"
+                }
+              },
+              "queryRef": "rpt_source_freshness.n_series",
+              "nativeQueryRef": "Series",
+              "displayName": "Series"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_source_freshness"
+                    }
+                  },
+                  "Property": "n_rows"
+                }
+              },
+              "queryRef": "rpt_source_freshness.n_rows",
+              "nativeQueryRef": "Rows",
+              "displayName": "Rows"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_source_freshness"
+                    }
+                  },
+                  "Property": "latest_data_date"
+                }
+              },
+              "queryRef": "rpt_source_freshness.latest_data_date",
+              "nativeQueryRef": "Latest data point",
+              "displayName": "Latest data point"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_source_freshness"
+                    }
+                  },
+                  "Property": "last_success_at"
+                }
+              },
+              "queryRef": "rpt_source_freshness.last_success_at",
+              "nativeQueryRef": "Last successful load (UTC)",
+              "displayName": "Last successful load (UTC)"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_source_freshness"
+                    }
+                  },
+                  "Property": "n_runs"
+                }
+              },
+              "queryRef": "rpt_source_freshness.n_runs",
+              "nativeQueryRef": "Runs",
+              "displayName": "Runs"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_source_freshness"
+                    }
+                  },
+                  "Property": "n_failed_runs"
+                }
+              },
+              "queryRef": "rpt_source_freshness.n_failed_runs",
+              "nativeQueryRef": "Failed runs",
+              "displayName": "Failed runs"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "total": [
+        {
+          "properties": {
+            "totals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#64748B'"
+                    }
+                  }
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "grid": [
+        {
+          "properties": {
+            "gridHorizontal": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "gridHorizontalColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E2E8F0'"
+                    }
+                  }
+                }
+              }
+            },
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Sources'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
