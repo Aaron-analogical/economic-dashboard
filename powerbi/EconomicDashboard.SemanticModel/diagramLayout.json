@@ -10,7 +10,7 @@
       "nodes": [
         {
           "location": {
-            "x": 1172.9540208623362,
+            "x": 3111.33707087703,
             "y": 104.75627320605491
           },
           "nodeIndex": "_Measures",
@@ -23,7 +23,7 @@
         },
         {
           "location": {
-            "x": 771.77026203170635,
+            "x": 2710.1533120464,
             "y": 182.75840060695361
           },
           "nodeIndex": "dim_date",
@@ -36,7 +36,7 @@
         },
         {
           "location": {
-            "x": 0,
+            "x": 1938.3830500146937,
             "y": 275.02569922852427
           },
           "nodeIndex": "dim_indicator",
@@ -49,7 +49,7 @@
         },
         {
           "location": {
-            "x": 250.01705454270234,
+            "x": 2188.4001045573959,
             "y": -50
           },
           "nodeIndex": "fct_indicator_monthly",
@@ -62,13 +62,104 @@
         },
         {
           "location": {
-            "x": 407.09963472731181,
+            "x": 2345.4826847420054,
             "y": 464.6401392980402
           },
           "nodeIndex": "fct_observations",
           "nodeLineageTag": "e1877c7d-3f63-47b5-a1b9-cccdfd5adada",
           "size": {
             "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 852.38305001469382,
+            "y": 269.32006964902007
+          },
+          "nodeIndex": "Country A",
+          "nodeLineageTag": "9ef6d5d7-d857-4e24-a15a-575f9b895c32",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1136.3830500146937,
+            "y": 269.32006964902007
+          },
+          "nodeIndex": "Country B",
+          "nodeLineageTag": "2c90cac1-8604-42c4-8f47-a63fcece8af2",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 618.38305001469382,
+            "y": 141.33495886942137
+          },
+          "nodeIndex": "dim_country",
+          "nodeLineageTag": "903d1c38-8fc4-43b1-ad0b-d8b80dd51c0b",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 133.32006964902007
+          },
+          "nodeIndex": "dim_wb_indicator",
+          "nodeLineageTag": "7a01876d-e2cb-4562-93c8-2e85bb9af0eb",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 334.20156119318534,
+            "y": 150.17965682926624
+          },
+          "nodeIndex": "fct_country_indicator_annual",
+          "nodeLineageTag": "e8c1c4f5-0ed5-4aa6-9990-5f1c4472e598",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1420.3830500146937,
+            "y": 183.32006964902007
+          },
+          "nodeIndex": "fct_ingestion_runs",
+          "nodeLineageTag": "523ac9d4-3917-4526-a42d-30e37c6c7db6",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1704.3830500146937,
+            "y": 183.32006964902007
+          },
+          "nodeIndex": "rpt_source_freshness",
+          "nodeLineageTag": "6439ae78-621f-4be7-b181-0259b93d534d",
+          "size": {
+            "height": 300,
             "width": 234
           },
           "zIndex": 0

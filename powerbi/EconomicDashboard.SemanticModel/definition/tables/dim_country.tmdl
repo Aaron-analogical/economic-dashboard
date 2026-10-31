@@ -51,7 +51,7 @@ table dim_country
 
 		annotation SummarizationSetBy = User
 
-	partition 'dim_country' = m
+	partition dim_country = m
 		mode: import
 		source =
 				let
@@ -65,3 +65,4 @@ table dim_country
 	annotation PBI_NavigationStepName = Navigation
 
 	annotation PBI_ResultType = Table
+

@@ -44,8 +44,8 @@ table dim_wb_indicator
 
 	column sort_order
 		dataType: int64
-		formatString: 0
 		isHidden
+		formatString: 0
 		lineageTag: 25f874d1-19ad-4bca-899f-1c650e7603c5
 		summarizeBy: none
 		sourceColumn: sort_order
@@ -97,7 +97,7 @@ table dim_wb_indicator
 
 		annotation SummarizationSetBy = User
 
-	partition 'dim_wb_indicator' = m
+	partition dim_wb_indicator = m
 		mode: import
 		source =
 				let
@@ -111,3 +111,4 @@ table dim_wb_indicator
 	annotation PBI_NavigationStepName = Navigation
 
 	annotation PBI_ResultType = Table
+

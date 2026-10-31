@@ -90,7 +90,7 @@ table rpt_source_freshness
 
 		annotation SummarizationSetBy = User
 
-	partition 'rpt_source_freshness' = m
+	partition rpt_source_freshness = m
 		mode: import
 		source =
 				let
@@ -104,3 +104,4 @@ table rpt_source_freshness
 	annotation PBI_NavigationStepName = Navigation
 
 	annotation PBI_ResultType = Table
+

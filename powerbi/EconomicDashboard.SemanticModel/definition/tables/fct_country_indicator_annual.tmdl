@@ -72,7 +72,7 @@ table fct_country_indicator_annual
 
 		annotation SummarizationSetBy = User
 
-	partition 'fct_country_indicator_annual' = m
+	partition fct_country_indicator_annual = m
 		mode: import
 		source =
 				let
@@ -86,3 +86,4 @@ table fct_country_indicator_annual
 	annotation PBI_NavigationStepName = Navigation
 
 	annotation PBI_ResultType = Table
+

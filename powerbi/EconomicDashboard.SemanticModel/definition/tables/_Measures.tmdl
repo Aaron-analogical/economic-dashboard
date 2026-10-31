@@ -100,24 +100,27 @@ table _Measures
 
 	/// World Bank indicator value.
 	measure 'WB Value' = AVERAGE ( fct_country_indicator_annual[value] )
-		formatString: #,0.00
 		displayFolder: Comparison
 		lineageTag: cbd4ed89-f56e-47a6-86bf-b0707f557eb3
+
+		formatStringDefinition = VAR _c = SELECTEDVALUE ( dim_wb_indicator[indicator_code] ) VAR _v = ABS ( SELECTEDMEASURE () ) RETURN SWITCH ( _c, "NY.GDP.MKTP.CD", IF ( _v >= 1e12, "$#,0,,,,.0""T""", "$#,0,,,""B""" ), "NY.GDP.PCAP.CD", "$#,0", "SP.POP.TOTL", IF ( _v >= 1e9, "#,0,,,.00""B""", "#,0,,.0""M""" ), "0.0""%""" )
 
 	/// Value of the latest available year in the current context (per country on the ranking chart).
 	measure 'WB Latest Value' =
 			VAR _year = MAX ( fct_country_indicator_annual[year] )
 			RETURN
 			    CALCULATE ( [WB Value], fct_country_indicator_annual[year] = _year )
-		formatString: #,0.00
 		displayFolder: Comparison
 		lineageTag: 7b873aa3-73b8-4697-a600-91f867bf69cd
 
+		formatStringDefinition = VAR _c = SELECTEDVALUE ( dim_wb_indicator[indicator_code] ) VAR _v = ABS ( SELECTEDMEASURE () ) RETURN SWITCH ( _c, "NY.GDP.MKTP.CD", IF ( _v >= 1e12, "$#,0,,,,.0""T""", "$#,0,,,""B""" ), "NY.GDP.PCAP.CD", "$#,0", "SP.POP.TOTL", IF ( _v >= 1e9, "#,0,,,.00""B""", "#,0,,.0""M""" ), "0.0""%""" )
+
 	/// Indicator value for Country A (yearly series).
 	measure 'Value A' = CALCULATE ( [WB Value], TREATAS ( VALUES ( 'Country A'[iso3] ), dim_country[iso3] ) )
-		formatString: #,0.00
 		displayFolder: Comparison
 		lineageTag: 5ab8ed13-3c0b-48dd-a262-e1f5db81a79d
+
+		formatStringDefinition = VAR _c = SELECTEDVALUE ( dim_wb_indicator[indicator_code] ) VAR _v = ABS ( SELECTEDMEASURE () ) RETURN SWITCH ( _c, "NY.GDP.MKTP.CD", IF ( _v >= 1e12, "$#,0,,,,.0""T""", "$#,0,,,""B""" ), "NY.GDP.PCAP.CD", "$#,0", "SP.POP.TOTL", IF ( _v >= 1e9, "#,0,,,.00""B""", "#,0,,.0""M""" ), "0.0""%""" )
 
 	/// Most recent year with data for Country A within the selected years.
 	measure 'Latest Year A' = CALCULATE ( MAX ( fct_country_indicator_annual[year] ), TREATAS ( VALUES ( 'Country A'[iso3] ), dim_country[iso3] ) )
@@ -133,9 +136,10 @@ table _Measures
 			        HASONEVALUE ( dim_wb_indicator[indicator_code] ),
 			        CALCULATE ( [WB Value], TREATAS ( VALUES ( 'Country A'[iso3] ), dim_country[iso3] ), fct_country_indicator_annual[year] = _year )
 			    )
-		formatString: #,0.00
 		displayFolder: Comparison
 		lineageTag: a428f437-d69c-498c-85ec-a4159baa84b8
+
+		formatStringDefinition = VAR _c = SELECTEDVALUE ( dim_wb_indicator[indicator_code] ) VAR _v = ABS ( SELECTEDMEASURE () ) RETURN SWITCH ( _c, "NY.GDP.MKTP.CD", IF ( _v >= 1e12, "$#,0,,,,.0""T""", "$#,0,,,""B""" ), "NY.GDP.PCAP.CD", "$#,0", "SP.POP.TOTL", IF ( _v >= 1e9, "#,0,,,.00""B""", "#,0,,.0""M""" ), "0.0""%""" )
 
 	/// Rank of Country A among tracked countries (1 = best).
 	measure 'Rank A' =
@@ -189,9 +193,10 @@ table _Measures
 
 	/// Indicator value for Country B (yearly series).
 	measure 'Value B' = CALCULATE ( [WB Value], TREATAS ( VALUES ( 'Country B'[iso3] ), dim_country[iso3] ) )
-		formatString: #,0.00
 		displayFolder: Comparison
 		lineageTag: 9b685c77-e624-4518-ae8a-789d775142a6
+
+		formatStringDefinition = VAR _c = SELECTEDVALUE ( dim_wb_indicator[indicator_code] ) VAR _v = ABS ( SELECTEDMEASURE () ) RETURN SWITCH ( _c, "NY.GDP.MKTP.CD", IF ( _v >= 1e12, "$#,0,,,,.0""T""", "$#,0,,,""B""" ), "NY.GDP.PCAP.CD", "$#,0", "SP.POP.TOTL", IF ( _v >= 1e9, "#,0,,,.00""B""", "#,0,,.0""M""" ), "0.0""%""" )
 
 	/// Most recent year with data for Country B within the selected years.
 	measure 'Latest Year B' = CALCULATE ( MAX ( fct_country_indicator_annual[year] ), TREATAS ( VALUES ( 'Country B'[iso3] ), dim_country[iso3] ) )
@@ -207,9 +212,10 @@ table _Measures
 			        HASONEVALUE ( dim_wb_indicator[indicator_code] ),
 			        CALCULATE ( [WB Value], TREATAS ( VALUES ( 'Country B'[iso3] ), dim_country[iso3] ), fct_country_indicator_annual[year] = _year )
 			    )
-		formatString: #,0.00
 		displayFolder: Comparison
 		lineageTag: 1d38daca-670c-454b-a05d-bb8d07f031d6
+
+		formatStringDefinition = VAR _c = SELECTEDVALUE ( dim_wb_indicator[indicator_code] ) VAR _v = ABS ( SELECTEDMEASURE () ) RETURN SWITCH ( _c, "NY.GDP.MKTP.CD", IF ( _v >= 1e12, "$#,0,,,,.0""T""", "$#,0,,,""B""" ), "NY.GDP.PCAP.CD", "$#,0", "SP.POP.TOTL", IF ( _v >= 1e9, "#,0,,,.00""B""", "#,0,,.0""M""" ), "0.0""%""" )
 
 	/// Rank of Country B among tracked countries (1 = best).
 	measure 'Rank B' =
@@ -263,12 +269,13 @@ table _Measures
 
 	/// Latest value of Country A minus Country B.
 	measure 'Gap A-B' = [Latest Value A] - [Latest Value B]
-		formatString: +#,0.00;-#,0.00;0.00
 		displayFolder: Comparison
 		lineageTag: 60f6d256-f883-4288-849c-09198a70a326
 
+		formatStringDefinition = VAR _c = SELECTEDVALUE ( dim_wb_indicator[indicator_code] ) VAR _v = ABS ( SELECTEDMEASURE () ) RETURN SWITCH ( _c, "NY.GDP.MKTP.CD", IF ( _v >= 1e12, "+$#,0,,,,.0""T"";-$#,0,,,,.0""T""", "+$#,0,,,""B"";-$#,0,,,""B""" ), "NY.GDP.PCAP.CD", "+$#,0;-$#,0;$0", "SP.POP.TOTL", "+#,0,,.0""M"";-#,0,,.0""M"";0", "+0.0"" pts"";-0.0"" pts"";0.0"" pts""" )
+
 	/// Which country does better on the selected indicator.
-	measure 'Leader' =
+	measure Leader =
 			VAR _a = SELECTEDVALUE ( 'Country A'[country_name] )
 			VAR _b = SELECTEDVALUE ( 'Country B'[country_name] )
 			RETURN
@@ -334,7 +341,7 @@ table _Measures
 		lineageTag: f04d0e2b-1acb-460a-bbb3-398631f14ffc
 
 	/// Number of extractor runs.
-	measure 'Runs' = COUNTROWS ( fct_ingestion_runs )
+	measure Runs = COUNTROWS ( fct_ingestion_runs )
 		formatString: #,0
 		displayFolder: Pipeline
 		lineageTag: d59e9a2d-d75d-4dfa-bd03-3fc851d93b55
@@ -405,13 +412,13 @@ table _Measures
 
 	/// Latest population, ignoring the indicator picker.
 	measure 'Tip Population' = CALCULATE ( [WB Latest Value], REMOVEFILTERS ( dim_wb_indicator ), dim_wb_indicator[indicator_code] = "SP.POP.TOTL" )
-		formatString: #,0
+		formatString: #,0,,.0"M"
 		displayFolder: Comparison
 		lineageTag: 2d6e4f8a-1c7b-4f9e-9add-8b0c2e4f6a77
 
 	/// Latest GDP in current US$, ignoring the indicator picker.
 	measure 'Tip GDP' = CALCULATE ( [WB Latest Value], REMOVEFILTERS ( dim_wb_indicator ), dim_wb_indicator[indicator_code] = "NY.GDP.MKTP.CD" )
-		formatString: \$#,0
+		formatString: \$#,0,,,,.0"T"
 		displayFolder: Comparison
 		lineageTag: 3e7f5a9b-2d8c-4a0f-8bee-9c1d3f5a7b88
 
