@@ -3,7 +3,7 @@ select
     source,
     started_at,
     finished_at,
-    started_at::date as run_date,
+    started_at::date as run_date,  -- UTC
     duration_seconds,
     status,
     rows_loaded,

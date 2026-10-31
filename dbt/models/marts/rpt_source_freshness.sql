@@ -47,10 +47,10 @@ select
     r.last_run_at,
     coalesce(r.n_runs, 0)        as n_runs,
     coalesce(r.n_failed_runs, 0) as n_failed_runs,
-    round(extract(epoch from now() - r.last_success_at) / 3600, 1) as hours_since_success,
+    round(extract(epoch from (now() at time zone 'UTC') - r.last_success_at) / 3600, 1) as hours_since_success,
     case
         when r.last_success_at is null                     then 'never run'
-        when r.last_success_at < now() - interval '2 days' then 'stale'
+        when r.last_success_at < (now() at time zone 'UTC') - interval '2 days' then 'stale'
         else 'fresh'
     end                          as freshness_status
 from data as d
