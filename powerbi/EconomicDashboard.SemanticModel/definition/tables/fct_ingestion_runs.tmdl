@@ -1,0 +1,107 @@
+table fct_ingestion_runs
+	lineageTag: 523ac9d4-3917-4526-a42d-30e37c6c7db6
+
+	column run_id
+		dataType: int64
+		formatString: 0
+		lineageTag: de8b23f6-0196-4a10-989a-de3264e99b12
+		summarizeBy: none
+		sourceColumn: run_id
+
+		annotation SummarizationSetBy = User
+
+	column source
+		dataType: string
+		lineageTag: 53474ebb-1c66-4fa5-ba55-e9cdab2ea2e3
+		summarizeBy: none
+		sourceColumn: source
+
+		annotation SummarizationSetBy = User
+
+	column started_at
+		dataType: dateTime
+		formatString: yyyy-mm-dd hh:nn
+		lineageTag: a28f9d4c-bd17-4584-a30c-d4cdac70b5be
+		summarizeBy: none
+		sourceColumn: started_at
+
+		annotation SummarizationSetBy = User
+
+	column finished_at
+		dataType: dateTime
+		formatString: yyyy-mm-dd hh:nn
+		lineageTag: 550e955b-d4a2-4fb2-a60e-b4b91695c80e
+		summarizeBy: none
+		sourceColumn: finished_at
+
+		annotation SummarizationSetBy = User
+
+	column run_date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: eb0ef2f4-0d2c-476c-985f-c3d18f6b20ce
+		summarizeBy: none
+		sourceColumn: run_date
+
+		annotation SummarizationSetBy = User
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column duration_seconds
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 1c448155-c181-473f-9fcb-34bb68416c9a
+		summarizeBy: none
+		sourceColumn: duration_seconds
+
+		annotation SummarizationSetBy = User
+
+	column status
+		dataType: string
+		lineageTag: fe94c892-2c43-4599-a356-eb5710935e74
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = User
+
+	column rows_loaded
+		dataType: int64
+		formatString: #,0
+		lineageTag: 0530c5b4-5da1-4f67-9285-691771916909
+		summarizeBy: none
+		sourceColumn: rows_loaded
+
+		annotation SummarizationSetBy = User
+
+	column series_ok
+		dataType: int64
+		formatString: 0
+		lineageTag: c13904f2-6f08-4c33-be5a-d2dbb016a9f5
+		summarizeBy: none
+		sourceColumn: series_ok
+
+		annotation SummarizationSetBy = User
+
+	column series_failed
+		dataType: int64
+		formatString: 0
+		lineageTag: ef869ad3-58bd-44ac-9941-59bb87ddde43
+		summarizeBy: none
+		sourceColumn: series_failed
+
+		annotation SummarizationSetBy = User
+
+	partition 'fct_ingestion_runs' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PgHost, PgDatabase),
+				    Navigation = Source{[Schema = "analytics", Item = "fct_ingestion_runs"]}[Data],
+				    SelectedColumns = Table.SelectColumns(Navigation, {"run_id", "source", "started_at", "finished_at", "run_date", "duration_seconds", "status", "rows_loaded", "series_ok", "series_failed"}),
+				    Typed = Table.TransformColumnTypes(SelectedColumns, {{"run_id", Int64.Type}, {"source", type text}, {"started_at", type datetime}, {"finished_at", type datetime}, {"run_date", type date}, {"duration_seconds", type number}, {"status", type text}, {"rows_loaded", Int64.Type}, {"series_ok", Int64.Type}, {"series_failed", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

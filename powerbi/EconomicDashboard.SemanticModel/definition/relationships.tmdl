@@ -14,3 +14,10 @@ relationship 579b40d4-b275-479b-ab13-93c7e7d7ce4c
 	fromColumn: fct_observations.observation_date
 	toColumn: dim_date.date
 
+relationship 37110057-a0c3-493a-a830-01aee67ba73f
+	fromColumn: fct_country_indicator_annual.country_iso3
+	toColumn: dim_country.iso3
+
+relationship d1313137-35ef-4674-a9c7-a95141b293d5
+	fromColumn: fct_country_indicator_annual.indicator_code
+	toColumn: dim_wb_indicator.indicator_code

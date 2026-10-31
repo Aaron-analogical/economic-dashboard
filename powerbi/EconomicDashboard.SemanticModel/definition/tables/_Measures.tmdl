@@ -98,6 +98,328 @@ table _Measures
 		formatString: yyyy-mm-dd
 		lineageTag: 9500ee1b-abd1-43b9-a306-ee8379e883f0
 
+	/// World Bank indicator value.
+	measure 'WB Value' = AVERAGE ( fct_country_indicator_annual[value] )
+		formatString: #,0.00
+		displayFolder: Comparison
+		lineageTag: cbd4ed89-f56e-47a6-86bf-b0707f557eb3
+
+	/// Value of the latest available year in the current context (per country on the ranking chart).
+	measure 'WB Latest Value' =
+			VAR _year = MAX ( fct_country_indicator_annual[year] )
+			RETURN
+			    CALCULATE ( [WB Value], fct_country_indicator_annual[year] = _year )
+		formatString: #,0.00
+		displayFolder: Comparison
+		lineageTag: 7b873aa3-73b8-4697-a600-91f867bf69cd
+
+	/// Indicator value for Country A (yearly series).
+	measure 'Value A' = CALCULATE ( [WB Value], TREATAS ( VALUES ( 'Country A'[iso3] ), dim_country[iso3] ) )
+		formatString: #,0.00
+		displayFolder: Comparison
+		lineageTag: 5ab8ed13-3c0b-48dd-a262-e1f5db81a79d
+
+	/// Most recent year with data for Country A within the selected years.
+	measure 'Latest Year A' = CALCULATE ( MAX ( fct_country_indicator_annual[year] ), TREATAS ( VALUES ( 'Country A'[iso3] ), dim_country[iso3] ) )
+		formatString: 0
+		displayFolder: Comparison
+		lineageTag: 138aab57-af0e-4ff4-bc68-802c941fa81b
+
+	/// Value of the latest available year for Country A.
+	measure 'Latest Value A' =
+			VAR _year = [Latest Year A]
+			RETURN
+			    IF (
+			        HASONEVALUE ( dim_wb_indicator[indicator_code] ),
+			        CALCULATE ( [WB Value], TREATAS ( VALUES ( 'Country A'[iso3] ), dim_country[iso3] ), fct_country_indicator_annual[year] = _year )
+			    )
+		formatString: #,0.00
+		displayFolder: Comparison
+		lineageTag: a428f437-d69c-498c-85ec-a4159baa84b8
+
+	/// Rank of Country A among tracked countries (1 = best).
+	measure 'Rank A' =
+			VAR _year = [Latest Year A]
+			RETURN
+			    IF (
+			        HASONEVALUE ( dim_wb_indicator[indicator_code] ),
+			        CALCULATE ( MIN ( fct_country_indicator_annual[rank_in_year] ), TREATAS ( VALUES ( 'Country A'[iso3] ), dim_country[iso3] ), fct_country_indicator_annual[year] = _year )
+			    )
+		formatString: 0
+		displayFolder: Comparison
+		lineageTag: 9b012f50-e5a4-4f97-b5bf-16cfced2f180
+
+	/// Rank text for Country A, e.g. '#2 of 10 in 2025'.
+	measure 'Rank Label A' =
+			VAR _rank = [Rank A]
+			VAR _year = [Latest Year A]
+			VAR _n =
+			    CALCULATE (
+			        DISTINCTCOUNT ( fct_country_indicator_annual[country_iso3] ),
+			        REMOVEFILTERS ( dim_country ),
+			        fct_country_indicator_annual[year] = _year
+			    )
+			RETURN
+			    IF ( NOT ISBLANK ( _rank ), "#" & _rank & " of " & _n & " in " & _year )
+		displayFolder: Comparison
+		lineageTag: 51624a54-d2d7-46b8-8760-d43ac7e6e474
+
+	/// 1 when Country A does better on the indicator, -1 when worse, 0 otherwise.
+	measure 'Better Flag A' =
+			VAR _dir = SELECTEDVALUE ( dim_wb_indicator[better_direction] )
+			VAR _a = [Latest Value A]
+			VAR _b = [Latest Value B]
+			VAR _mine = _a
+			VAR _other = _b
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( _a ) || ISBLANK ( _b ) || _dir = "none" || _a = _b, 0,
+			        ( _dir = "up" && _mine > _other ) || ( _dir = "down" && _mine < _other ), 1,
+			        -1
+			    )
+		formatString: 0
+		displayFolder: Comparison
+		lineageTag: abb94687-69b2-4976-bfec-e32c9639f419
+
+	/// Font colour for Country A values: green when better, red when worse.
+	measure 'Color A' = SWITCH ( [Better Flag A], 1, "#15803D", -1, "#B91C1C", "#334155" )
+		displayFolder: Comparison
+		lineageTag: 809c225f-0354-418b-afd4-a19043681dc2
+
+	/// Indicator value for Country B (yearly series).
+	measure 'Value B' = CALCULATE ( [WB Value], TREATAS ( VALUES ( 'Country B'[iso3] ), dim_country[iso3] ) )
+		formatString: #,0.00
+		displayFolder: Comparison
+		lineageTag: 9b685c77-e624-4518-ae8a-789d775142a6
+
+	/// Most recent year with data for Country B within the selected years.
+	measure 'Latest Year B' = CALCULATE ( MAX ( fct_country_indicator_annual[year] ), TREATAS ( VALUES ( 'Country B'[iso3] ), dim_country[iso3] ) )
+		formatString: 0
+		displayFolder: Comparison
+		lineageTag: d090a112-cc6f-4920-baa4-9c7106741866
+
+	/// Value of the latest available year for Country B.
+	measure 'Latest Value B' =
+			VAR _year = [Latest Year B]
+			RETURN
+			    IF (
+			        HASONEVALUE ( dim_wb_indicator[indicator_code] ),
+			        CALCULATE ( [WB Value], TREATAS ( VALUES ( 'Country B'[iso3] ), dim_country[iso3] ), fct_country_indicator_annual[year] = _year )
+			    )
+		formatString: #,0.00
+		displayFolder: Comparison
+		lineageTag: 1d38daca-670c-454b-a05d-bb8d07f031d6
+
+	/// Rank of Country B among tracked countries (1 = best).
+	measure 'Rank B' =
+			VAR _year = [Latest Year B]
+			RETURN
+			    IF (
+			        HASONEVALUE ( dim_wb_indicator[indicator_code] ),
+			        CALCULATE ( MIN ( fct_country_indicator_annual[rank_in_year] ), TREATAS ( VALUES ( 'Country B'[iso3] ), dim_country[iso3] ), fct_country_indicator_annual[year] = _year )
+			    )
+		formatString: 0
+		displayFolder: Comparison
+		lineageTag: c35272a4-d532-432c-b168-42b06a90a9dd
+
+	/// Rank text for Country B, e.g. '#2 of 10 in 2025'.
+	measure 'Rank Label B' =
+			VAR _rank = [Rank B]
+			VAR _year = [Latest Year B]
+			VAR _n =
+			    CALCULATE (
+			        DISTINCTCOUNT ( fct_country_indicator_annual[country_iso3] ),
+			        REMOVEFILTERS ( dim_country ),
+			        fct_country_indicator_annual[year] = _year
+			    )
+			RETURN
+			    IF ( NOT ISBLANK ( _rank ), "#" & _rank & " of " & _n & " in " & _year )
+		displayFolder: Comparison
+		lineageTag: 968e40e9-4ecc-4b96-abb6-8f1b0b534663
+
+	/// 1 when Country B does better on the indicator, -1 when worse, 0 otherwise.
+	measure 'Better Flag B' =
+			VAR _dir = SELECTEDVALUE ( dim_wb_indicator[better_direction] )
+			VAR _a = [Latest Value A]
+			VAR _b = [Latest Value B]
+			VAR _mine = _b
+			VAR _other = _a
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( _a ) || ISBLANK ( _b ) || _dir = "none" || _a = _b, 0,
+			        ( _dir = "up" && _mine > _other ) || ( _dir = "down" && _mine < _other ), 1,
+			        -1
+			    )
+		formatString: 0
+		displayFolder: Comparison
+		lineageTag: a561a2fb-9a13-430a-a881-24577a5e4869
+
+	/// Font colour for Country B values: green when better, red when worse.
+	measure 'Color B' = SWITCH ( [Better Flag B], 1, "#15803D", -1, "#B91C1C", "#334155" )
+		displayFolder: Comparison
+		lineageTag: afe21824-5f2d-4fea-99f4-83dea22abe72
+
+	/// Latest value of Country A minus Country B.
+	measure 'Gap A-B' = [Latest Value A] - [Latest Value B]
+		formatString: +#,0.00;-#,0.00;0.00
+		displayFolder: Comparison
+		lineageTag: 60f6d256-f883-4288-849c-09198a70a326
+
+	/// Which country does better on the selected indicator.
+	measure 'Leader' =
+			VAR _a = SELECTEDVALUE ( 'Country A'[country_name] )
+			VAR _b = SELECTEDVALUE ( 'Country B'[country_name] )
+			RETURN
+			    SWITCH (
+			        [Better Flag A],
+			        1, _a & " leads",
+			        -1, _b & " leads",
+			        IF ( SELECTEDVALUE ( dim_wb_indicator[better_direction] ) = "none", "No better/worse", "Tie" )
+			    )
+		displayFolder: Comparison
+		lineageTag: 8991a2bd-d5fd-4896-8996-547a69e1c1c2
+
+	/// Dynamic title for the comparison page.
+	measure 'Comparison Title' =
+			SELECTEDVALUE ( 'Country A'[country_name], "Country A" ) & "  vs  "
+			    & SELECTEDVALUE ( 'Country B'[country_name], "Country B" ) & "  ·  "
+			    & SELECTEDVALUE ( dim_wb_indicator[indicator_name], "pick an indicator" )
+			    & IF ( HASONEVALUE ( dim_wb_indicator[unit] ), " (" & VALUES ( dim_wb_indicator[unit] ) & ")" )
+		displayFolder: Comparison
+		lineageTag: ba37aa4e-89cb-4900-9f18-b1f7797c2555
+
+	/// Highlights Country A (blue) and Country B (orange) on the ranking chart.
+	measure 'Bar Color' =
+			VAR _c = SELECTEDVALUE ( dim_country[iso3] )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        _c = SELECTEDVALUE ( 'Country A'[iso3] ), "#2563EB",
+			        _c = SELECTEDVALUE ( 'Country B'[iso3] ), "#F97316",
+			        "#CBD5E1"
+			    )
+		displayFolder: Comparison
+		lineageTag: af390d1b-359b-4805-826a-9b52fca5c3bf
+
+	/// Title of the drill-through page.
+	measure 'Profile Title' = SELECTEDVALUE ( dim_country[country_name], "Country" ) & " — country profile"
+		displayFolder: Comparison
+		lineageTag: f4a7f9c3-bdb9-4d71-8bf5-2395aaf43af8
+
+	/// Most recent successful extractor run (UTC).
+	measure 'Last Successful Run' = CALCULATE ( MAX ( fct_ingestion_runs[finished_at] ), fct_ingestion_runs[status] = "success" )
+		formatString: yyyy-mm-dd hh:nn
+		displayFolder: Pipeline
+		lineageTag: 93642cf5-e726-42c2-b688-862139ac2629
+
+	/// Hours since the last successful extractor run.
+	measure 'Hours Since Refresh' = DIVIDE ( DATEDIFF ( [Last Successful Run], UTCNOW (), MINUTE ), 60 )
+		formatString: #,0.0
+		displayFolder: Pipeline
+		lineageTag: ad01a890-01eb-4e46-ab46-fddef3dd377e
+
+	/// Healthy when the last successful run is less than 48 hours old (daily schedule).
+	measure 'Pipeline Status' =
+			VAR _h = [Hours Since Refresh]
+			RETURN
+			    SWITCH ( TRUE (), ISBLANK ( _h ), "No runs", _h <= 48, "Healthy", "Stale" )
+		displayFolder: Pipeline
+		lineageTag: 875cb77c-01ad-44e1-8137-000a44e66337
+
+	/// Colour for the pipeline status card.
+	measure 'Status Color' = SWITCH ( [Pipeline Status], "Healthy", "#15803D", "Stale", "#B91C1C", "#64748B" )
+		displayFolder: Pipeline
+		lineageTag: f04d0e2b-1acb-460a-bbb3-398631f14ffc
+
+	/// Number of extractor runs.
+	measure 'Runs' = COUNTROWS ( fct_ingestion_runs )
+		formatString: #,0
+		displayFolder: Pipeline
+		lineageTag: d59e9a2d-d75d-4dfa-bd03-3fc851d93b55
+
+	/// Number of successful extractor runs.
+	measure 'Successful Runs' = CALCULATE ( [Runs], fct_ingestion_runs[status] = "success" )
+		formatString: #,0
+		displayFolder: Pipeline
+		lineageTag: 50b64081-1547-4285-b630-6e1b8cdc024f
+
+	/// Number of failed or partial extractor runs.
+	measure 'Failed Runs' = CALCULATE ( [Runs], fct_ingestion_runs[status] <> "success" )
+		formatString: #,0
+		displayFolder: Pipeline
+		lineageTag: 1ffc04a7-82fb-4f98-b01a-8f9f7f6fab80
+
+	/// Share of extractor runs that loaded every series.
+	measure 'Success Rate' = DIVIDE ( [Successful Runs], [Runs] )
+		formatString: 0.0%
+		displayFolder: Pipeline
+		lineageTag: ebec447b-ebe5-4209-ae4f-55d78d9afa34
+
+	/// Clean observations available across sources.
+	measure 'Rows in Warehouse' = SUM ( rpt_source_freshness[n_rows] )
+		formatString: #,0
+		displayFolder: Pipeline
+		lineageTag: a9dbb150-2d40-4a90-8458-91c3d1a0c575
+
+	/// Rows upserted by the extractors.
+	measure 'Rows Loaded' = SUM ( fct_ingestion_runs[rows_loaded] )
+		formatString: #,0
+		displayFolder: Pipeline
+		lineageTag: 51a5ad91-2d9e-4e18-8f95-40cec96039e8
+
+	/// Card title for Country A, e.g. 'France · 2025'.
+	measure 'Card Title A' = SELECTEDVALUE ( 'Country A'[country_name], "Country A" ) & IF ( NOT ISBLANK ( [Latest Year A] ), "  ·  " & [Latest Year A] )
+		displayFolder: Comparison
+		lineageTag: 6d0f8e2a-5c1b-4f3e-9a7d-2b4c6e8f0a11
+
+	/// Card title for Country B, e.g. 'Japan · 2025'.
+	measure 'Card Title B' = SELECTEDVALUE ( 'Country B'[country_name], "Country B" ) & IF ( NOT ISBLANK ( [Latest Year B] ), "  ·  " & [Latest Year B] )
+		displayFolder: Comparison
+		lineageTag: 7e1f9a3b-6d2c-4a4f-8b8e-3c5d7f9a1b22
+
+	/// Latest GDP growth, ignoring the indicator picker (tooltip and profile pages).
+	measure 'Tip GDP Growth' = CALCULATE ( [WB Latest Value], REMOVEFILTERS ( dim_wb_indicator ), dim_wb_indicator[indicator_code] = "NY.GDP.MKTP.KD.ZG" )
+		formatString: +#,0.0"%";-#,0.0"%";0.0"%"
+		displayFolder: Comparison
+		lineageTag: 8f2a0b4c-7e3d-4b5a-9c9f-4d6e8a0b2c33
+
+	/// Latest inflation, ignoring the indicator picker (tooltip and profile pages).
+	measure 'Tip Inflation' = CALCULATE ( [WB Latest Value], REMOVEFILTERS ( dim_wb_indicator ), dim_wb_indicator[indicator_code] = "FP.CPI.TOTL.ZG" )
+		formatString: #,0.0"%"
+		displayFolder: Comparison
+		lineageTag: 9a3b1c5d-8f4e-4c6b-8daa-5e7f9b1c3d44
+
+	/// Latest unemployment rate, ignoring the indicator picker (tooltip and profile pages).
+	measure 'Tip Unemployment' = CALCULATE ( [WB Latest Value], REMOVEFILTERS ( dim_wb_indicator ), dim_wb_indicator[indicator_code] = "SL.UEM.TOTL.ZS" )
+		formatString: #,0.0"%"
+		displayFolder: Comparison
+		lineageTag: 0b4c2d6e-9a5f-4d7c-9ebb-6f8a0c2d4e55
+
+	/// Latest GDP per capita in US$, ignoring the indicator picker.
+	measure 'Tip GDP per Capita' = CALCULATE ( [WB Latest Value], REMOVEFILTERS ( dim_wb_indicator ), dim_wb_indicator[indicator_code] = "NY.GDP.PCAP.CD" )
+		formatString: \$#,0
+		displayFolder: Comparison
+		lineageTag: 1c5d3e7f-0b6a-4e8d-8fcc-7a9b1d3e5f66
+
+	/// Latest population, ignoring the indicator picker.
+	measure 'Tip Population' = CALCULATE ( [WB Latest Value], REMOVEFILTERS ( dim_wb_indicator ), dim_wb_indicator[indicator_code] = "SP.POP.TOTL" )
+		formatString: #,0
+		displayFolder: Comparison
+		lineageTag: 2d6e4f8a-1c7b-4f9e-9add-8b0c2e4f6a77
+
+	/// Latest GDP in current US$, ignoring the indicator picker.
+	measure 'Tip GDP' = CALCULATE ( [WB Latest Value], REMOVEFILTERS ( dim_wb_indicator ), dim_wb_indicator[indicator_code] = "NY.GDP.MKTP.CD" )
+		formatString: \$#,0
+		displayFolder: Comparison
+		lineageTag: 3e7f5a9b-2d8c-4a0f-8bee-9c1d3f5a7b88
+
+	/// Name of the country in context (tooltip and profile headers).
+	measure 'Country Name' = SELECTEDVALUE ( dim_country[country_name] )
+		displayFolder: Comparison
+		lineageTag: 4f8a6b0c-3e9d-4b1a-9cff-0d2e4a6b8c99
+
 	column Dummy
 		dataType: string
 		isHidden

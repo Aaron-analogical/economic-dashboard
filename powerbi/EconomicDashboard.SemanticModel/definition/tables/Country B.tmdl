@@ -1,0 +1,34 @@
+table 'Country B'
+	lineageTag: 2c90cac1-8604-42c4-8f47-a63fcece8af2
+
+	column iso3
+		dataType: string
+		isHidden
+		lineageTag: fd12a7e8-af0c-4c3b-a076-043c84d14000
+		summarizeBy: none
+		sourceColumn: iso3
+
+		annotation SummarizationSetBy = User
+
+	column country_name
+		dataType: string
+		lineageTag: d491d002-1699-417b-9d0d-5fa395a85b3c
+		summarizeBy: none
+		sourceColumn: country_name
+
+		annotation SummarizationSetBy = User
+
+	partition 'Country B' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PgHost, PgDatabase),
+				    Navigation = Source{[Schema = "analytics", Item = "dim_country"]}[Data],
+				    SelectedColumns = Table.SelectColumns(Navigation, {"iso3", "country_name"}),
+				    Typed = Table.TransformColumnTypes(SelectedColumns, {{"iso3", type text}, {"country_name", type text}})
+				in
+				    Typed
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

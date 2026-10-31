@@ -1,0 +1,67 @@
+table dim_country
+	lineageTag: 903d1c38-8fc4-43b1-ad0b-d8b80dd51c0b
+
+	column iso3
+		dataType: string
+		lineageTag: 3fdd80ca-00c6-4543-9c6a-d13a6d752a73
+		summarizeBy: none
+		sourceColumn: iso3
+
+		annotation SummarizationSetBy = User
+
+	column iso2
+		dataType: string
+		isHidden
+		lineageTag: 197a0740-557e-4cf7-8464-722a4acc9965
+		summarizeBy: none
+		sourceColumn: iso2
+
+		annotation SummarizationSetBy = User
+
+	column country_name
+		dataType: string
+		lineageTag: d2d95ee9-dc57-4d4f-9408-8e2738a9b6d2
+		summarizeBy: none
+		sourceColumn: country_name
+
+		annotation SummarizationSetBy = User
+
+	column region
+		dataType: string
+		lineageTag: fcdb935f-e27a-496c-88e7-8310e13b18c6
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = User
+
+	column country_group
+		dataType: string
+		lineageTag: 3cb99084-42c9-4164-9e10-46446dd61710
+		summarizeBy: none
+		sourceColumn: country_group
+
+		annotation SummarizationSetBy = User
+
+	column worldbank_url
+		dataType: string
+		lineageTag: 9cfa550d-5a5b-4caf-8090-a9574a9bc3a4
+		dataCategory: WebUrl
+		summarizeBy: none
+		sourceColumn: worldbank_url
+
+		annotation SummarizationSetBy = User
+
+	partition 'dim_country' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PgHost, PgDatabase),
+				    Navigation = Source{[Schema = "analytics", Item = "dim_country"]}[Data],
+				    SelectedColumns = Table.SelectColumns(Navigation, {"iso3", "iso2", "country_name", "region", "country_group", "worldbank_url"}),
+				    Typed = Table.TransformColumnTypes(SelectedColumns, {{"iso3", type text}, {"iso2", type text}, {"country_name", type text}, {"region", type text}, {"country_group", type text}, {"worldbank_url", type text}})
+				in
+				    Typed
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
