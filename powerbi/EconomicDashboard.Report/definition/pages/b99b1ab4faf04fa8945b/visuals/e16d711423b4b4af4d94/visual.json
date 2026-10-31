@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "e16d711423b4b4af4d94",
   "position": {
-    "x": 10,
-    "y": 14,
-    "z": 1,
-    "height": 64,
-    "width": 156,
-    "tabOrder": 1
+    "x": 6,
+    "y": 96,
+    "z": 2,
+    "height": 34,
+    "width": 164,
+    "tabOrder": 2
   },
   "visual": {
     "visualType": "textbox",
@@ -19,25 +19,12 @@
               {
                 "textRuns": [
                   {
-                    "value": "Economic",
+                    "value": "GLOBAL",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "15pt",
+                      "fontSize": "8pt",
                       "fontWeight": "bold",
-                      "color": "#FFFFFF"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "Dashboard",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "15pt",
-                      "fontWeight": "bold",
-                      "color": "#60A5FA"
+                      "color": "#64748B"
                     }
                   }
                 ]

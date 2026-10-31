@@ -2,18 +2,38 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "84ab19b1b3683c594751",
   "position": {
-    "x": 196.0,
-    "y": 100,
-    "z": 0,
-    "height": 90,
-    "width": 164.0,
-    "tabOrder": 0
+    "x": 556,
+    "y": 206,
+    "z": 11,
+    "height": 239,
+    "width": 344,
+    "tabOrder": 11
   },
   "visual": {
-    "visualType": "card",
+    "visualType": "areaChart",
     "query": {
       "queryState": {
-        "Values": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fct_country_indicator_annual"
+                    }
+                  },
+                  "Property": "year"
+                }
+              },
+              "queryRef": "fct_country_indicator_annual.year",
+              "nativeQueryRef": "Year",
+              "displayName": "Year",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
           "projections": [
             {
               "field": {
@@ -23,38 +43,93 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Tip GDP Growth"
+                  "Property": "WB Value"
                 }
               },
-              "queryRef": "_Measures.Tip GDP Growth",
-              "nativeQueryRef": "GDP growth",
-              "displayName": "GDP growth"
+              "queryRef": "_Measures.WB Value",
+              "nativeQueryRef": "Inflation (% per year)",
+              "displayName": "Inflation (% per year)"
             }
           ]
         }
       }
     },
     "objects": {
-      "labels": [
+      "valueAxis": [
         {
           "properties": {
-            "fontSize": {
+            "showAxisTitle": {
               "expr": {
                 "Literal": {
-                  "Value": "20D"
+                  "Value": "false"
+                }
+              }
+            },
+            "gridlineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E2E8F0'"
+                    }
+                  }
+                }
+              }
+            },
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
                 }
               }
             }
           }
         }
       ],
-      "categoryLabels": [
+      "categoryAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "legend": [
         {
           "properties": {
             "show": {
               "expr": {
                 "Literal": {
                   "Value": "false"
+                }
+              }
+            },
+            "position": {
+              "expr": {
+                "Literal": {
+                  "Value": "'TopRight'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dataPoint": [
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#2563EB'"
+                    }
+                  }
                 }
               }
             }
@@ -76,7 +151,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'GDP growth'"
+                  "Value": "'Inflation (% per year)'"
                 }
               }
             }
@@ -85,5 +160,63 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "c2be5faa3db2728bac2b",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_wb_indicator"
+              }
+            },
+            "Property": "indicator_code"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "d",
+              "Entity": "dim_wb_indicator",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "d"
+                          }
+                        },
+                        "Property": "indicator_code"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'FP.CPI.TOTL.ZG'"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "isHiddenInViewMode": true
+      }
+    ]
   }
 }

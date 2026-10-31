@@ -2,18 +2,38 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "3a0d6133d1eeaffd29d3",
   "position": {
-    "x": 916.0,
-    "y": 100,
-    "z": 4,
-    "height": 90,
-    "width": 164.0,
-    "tabOrder": 4
+    "x": 196,
+    "y": 461,
+    "z": 13,
+    "height": 239,
+    "width": 344,
+    "tabOrder": 13
   },
   "visual": {
-    "visualType": "card",
+    "visualType": "areaChart",
     "query": {
       "queryState": {
-        "Values": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fct_country_indicator_annual"
+                    }
+                  },
+                  "Property": "year"
+                }
+              },
+              "queryRef": "fct_country_indicator_annual.year",
+              "nativeQueryRef": "Year",
+              "displayName": "Year",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
           "projections": [
             {
               "field": {
@@ -23,38 +43,93 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Tip GDP"
+                  "Property": "WB Value"
                 }
               },
-              "queryRef": "_Measures.Tip GDP",
-              "nativeQueryRef": "GDP (US$)",
-              "displayName": "GDP (US$)"
+              "queryRef": "_Measures.WB Value",
+              "nativeQueryRef": "GDP per capita (US$)",
+              "displayName": "GDP per capita (US$)"
             }
           ]
         }
       }
     },
     "objects": {
-      "labels": [
+      "valueAxis": [
         {
           "properties": {
-            "fontSize": {
+            "showAxisTitle": {
               "expr": {
                 "Literal": {
-                  "Value": "20D"
+                  "Value": "false"
+                }
+              }
+            },
+            "gridlineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E2E8F0'"
+                    }
+                  }
+                }
+              }
+            },
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
                 }
               }
             }
           }
         }
       ],
-      "categoryLabels": [
+      "categoryAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "legend": [
         {
           "properties": {
             "show": {
               "expr": {
                 "Literal": {
                   "Value": "false"
+                }
+              }
+            },
+            "position": {
+              "expr": {
+                "Literal": {
+                  "Value": "'TopRight'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dataPoint": [
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#2563EB'"
+                    }
+                  }
                 }
               }
             }
@@ -76,7 +151,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'GDP (US$)'"
+                  "Value": "'GDP per capita (US$)'"
                 }
               }
             }
@@ -85,5 +160,63 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "a49a796a6283e2db4e28",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_wb_indicator"
+              }
+            },
+            "Property": "indicator_code"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "d",
+              "Entity": "dim_wb_indicator",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "d"
+                          }
+                        },
+                        "Property": "indicator_code"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'NY.GDP.PCAP.CD'"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "isHiddenInViewMode": true
+      }
+    ]
   }
 }

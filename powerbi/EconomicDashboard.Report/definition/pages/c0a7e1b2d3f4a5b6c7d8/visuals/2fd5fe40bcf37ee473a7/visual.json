@@ -119,6 +119,13 @@
                   "Value": "9D"
                 }
               }
+            },
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
             }
           }
         }
@@ -164,7 +171,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'All 10 countries \u00b7 right-click for profile'"
+                  "Value": "'All 10 countries · right-click for profile'"
                 }
               }
             }

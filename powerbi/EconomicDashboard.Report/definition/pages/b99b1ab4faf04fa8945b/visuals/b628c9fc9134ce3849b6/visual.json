@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "b628c9fc9134ce3849b6",
   "position": {
-    "x": 10,
-    "y": 436,
-    "z": 13,
-    "height": 24,
-    "width": 156,
-    "tabOrder": 13
+    "x": 6,
+    "y": 616,
+    "z": 14,
+    "height": 100,
+    "width": 164,
+    "tabOrder": 14
   },
   "visual": {
     "visualType": "textbox",
@@ -19,12 +19,35 @@
               {
                 "textRuns": [
                   {
-                    "value": "OPERATIONS",
+                    "value": "Data: FRED · World Bank",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "8pt",
-                      "fontWeight": "bold",
-                      "color": "#64748B"
+                      "color": "#94A3B8"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Python → Neon Postgres → dbt",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "8pt",
+                      "color": "#94A3B8"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Refreshed daily by GitHub Actions",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "8pt",
+                      "color": "#94A3B8"
                     }
                   }
                 ]

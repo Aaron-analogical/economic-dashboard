@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "980c6df0a4a3850500c4",
   "position": {
-    "x": 10,
-    "y": 92,
-    "z": 2,
-    "height": 24,
-    "width": 156,
-    "tabOrder": 2
+    "x": 6,
+    "y": 170,
+    "z": 4,
+    "height": 34,
+    "width": 164,
+    "tabOrder": 4
   },
   "visual": {
     "visualType": "textbox",
@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "GLOBAL",
+                    "value": "UNITED STATES",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "8pt",

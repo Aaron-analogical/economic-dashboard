@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "828e6074e3198a1b518c",
   "position": {
-    "x": 848,
-    "y": 16,
+    "x": 847.6847290640394,
+    "y": 15.960591133004927,
     "z": 1003,
-    "height": 64,
-    "width": 200,
+    "height": 73.5960591133005,
+    "width": 200.39408866995075,
     "tabOrder": 1003
   },
   "visual": {
@@ -28,8 +28,8 @@
               },
               "queryRef": "Country B.country_name",
               "nativeQueryRef": "Country B",
-              "displayName": "Country B",
-              "active": true
+              "active": true,
+              "displayName": "Country B"
             }
           ]
         }

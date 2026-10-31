@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "47f0b1d0f9cbfa25b761",
   "position": {
-    "x": 4,
-    "y": 290,
-    "z": 9,
-    "height": 32,
-    "width": 172,
-    "tabOrder": 9
+    "x": 8,
+    "y": 418,
+    "z": 11,
+    "height": 34,
+    "width": 160,
+    "tabOrder": 11
   },
   "visual": {
     "visualType": "actionButton",
@@ -22,9 +22,6 @@
                 }
               }
             }
-          },
-          "selector": {
-            "id": "default"
           }
         }
       ],
@@ -37,11 +34,15 @@
                   "Value": "true"
                 }
               }
-            },
+            }
+          }
+        },
+        {
+          "properties": {
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Inflation'"
+                  "Value": "'Markets'"
                 }
               }
             },
@@ -84,10 +85,31 @@
                 }
               }
             },
+            "verticalAlignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'middle'"
+                }
+              }
+            },
             "leftMargin": {
               "expr": {
                 "Literal": {
-                  "Value": "18D"
+                  "Value": "16D"
+                }
+              }
+            },
+            "topMargin": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "bottomMargin": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
                 }
               }
             }
@@ -98,17 +120,10 @@
         },
         {
           "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Inflation'"
+                  "Value": "'Markets'"
                 }
               }
             },
@@ -151,10 +166,31 @@
                 }
               }
             },
+            "verticalAlignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'middle'"
+                }
+              }
+            },
             "leftMargin": {
               "expr": {
                 "Literal": {
-                  "Value": "18D"
+                  "Value": "16D"
+                }
+              }
+            },
+            "topMargin": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "bottomMargin": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
                 }
               }
             }
@@ -165,17 +201,10 @@
         },
         {
           "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Inflation'"
+                  "Value": "'Markets'"
                 }
               }
             },
@@ -218,10 +247,31 @@
                 }
               }
             },
+            "verticalAlignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'middle'"
+                }
+              }
+            },
             "leftMargin": {
               "expr": {
                 "Literal": {
-                  "Value": "18D"
+                  "Value": "16D"
+                }
+              }
+            },
+            "topMargin": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "bottomMargin": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
                 }
               }
             }
@@ -240,7 +290,11 @@
                   "Value": "true"
                 }
               }
-            },
+            }
+          }
+        },
+        {
+          "properties": {
             "fillColor": {
               "solid": {
                 "color": {
@@ -266,13 +320,6 @@
         },
         {
           "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
             "fillColor": {
               "solid": {
                 "color": {
@@ -298,13 +345,6 @@
         },
         {
           "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
             "fillColor": {
               "solid": {
                 "color": {
@@ -339,9 +379,6 @@
                 }
               }
             }
-          },
-          "selector": {
-            "id": "default"
           }
         }
       ]
@@ -399,6 +436,40 @@
           }
         }
       ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
       "visualLink": [
         {
           "properties": {
@@ -419,7 +490,7 @@
             "navigationSection": {
               "expr": {
                 "Literal": {
-                  "Value": "'d319931b18bf42df828b'"
+                  "Value": "'cd50ba4fd45742ae99dd'"
                 }
               }
             }

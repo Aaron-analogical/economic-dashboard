@@ -59,21 +59,6 @@
               "queryRef": "_Measures.Latest Value B",
               "nativeQueryRef": "Country B",
               "displayName": "Country B"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_wb_indicator"
-                    }
-                  },
-                  "Property": "unit"
-                }
-              },
-              "queryRef": "dim_wb_indicator.unit",
-              "nativeQueryRef": "Unit",
-              "displayName": "Unit"
             }
           ]
         }
@@ -228,7 +213,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Head to head \u00b7 green = better'"
+                  "Value": "'Head to head · green = better'"
                 }
               }
             }

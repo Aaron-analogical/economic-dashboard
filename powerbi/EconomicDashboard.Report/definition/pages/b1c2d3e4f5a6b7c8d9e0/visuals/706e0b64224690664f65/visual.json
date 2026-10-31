@@ -2,108 +2,88 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "706e0b64224690664f65",
   "position": {
-    "x": 10,
-    "y": 640,
-    "z": 14,
-    "height": 70,
-    "width": 156,
-    "tabOrder": 14
+    "x": 1096,
+    "y": 100,
+    "z": 5,
+    "height": 90,
+    "width": 164,
+    "tabOrder": 5
   },
   "visual": {
-    "visualType": "textbox",
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Tip Population"
+                }
+              },
+              "queryRef": "_Measures.Tip Population",
+              "nativeQueryRef": "Population",
+              "displayName": "Population"
+            }
+          ]
+        }
+      }
+    },
     "objects": {
-      "general": [
+      "labels": [
         {
           "properties": {
-            "paragraphs": [
-              {
-                "textRuns": [
-                  {
-                    "value": "Data: FRED \u00b7 World Bank",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "8pt",
-                      "color": "#94A3B8"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "Python \u2192 Neon Postgres \u2192 dbt",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "8pt",
-                      "color": "#94A3B8"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "Refreshed daily by GitHub Actions",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "8pt",
-                      "color": "#94A3B8"
-                    }
-                  }
-                ]
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "20D"
+                }
               }
-            ]
+            },
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
           }
         }
       ]
     },
     "visualContainerObjects": {
-      "background": [
+      "title": [
         {
           "properties": {
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
-            }
-          }
-        }
-      ],
-      "border": [
-        {
-          "properties": {
-            "show": {
+            },
+            "text": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "dropShadow": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "visualHeader": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
+                  "Value": "'Population'"
                 }
               }
             }

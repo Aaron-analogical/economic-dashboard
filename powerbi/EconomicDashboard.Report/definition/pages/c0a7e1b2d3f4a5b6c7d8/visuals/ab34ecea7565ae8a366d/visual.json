@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "ab34ecea7565ae8a366d",
   "position": {
-    "x": 1060,
-    "y": 16,
+    "x": 1059.6059113300494,
+    "y": 15.960591133004927,
     "z": 1004,
-    "height": 64,
-    "width": 200,
+    "height": 73.5960591133005,
+    "width": 200.39408866995075,
     "tabOrder": 1004
   },
   "visual": {
@@ -28,8 +28,8 @@
               },
               "queryRef": "fct_country_indicator_annual.year",
               "nativeQueryRef": "Years",
-              "displayName": "Years",
-              "active": true
+              "active": true,
+              "displayName": "Years"
             }
           ]
         }
@@ -89,6 +89,60 @@
                   "expr": {
                     "Literal": {
                       "Value": "'#0F172A'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "numericInputStyle": [
+        {
+          "properties": {
+            "textSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Chose the time period'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": -0.5
                     }
                   }
                 }
