@@ -8,3 +8,19 @@ seeds:
     columns:
       - name: series_id
         data_tests: [unique, not_null]
+
+  - name: countries
+    description: >
+      Countries in the country comparison. `ingestion/load_worldbank.py` loads
+      World Bank data for every row. Edit this file to add or remove a country.
+    columns:
+      - name: iso3
+        data_tests: [unique, not_null]
+
+  - name: wb_indicators
+    description: >
+      World Bank indicator catalogue: the list of indicators the extractor
+      loads, with business labels and whether higher values are better.
+    columns:
+      - name: indicator_code
+        data_tests: [unique, not_null]

@@ -7,33 +7,18 @@ Usage:
 """
 
 import csv
-import os
 import sys
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 
-import psycopg2
 from psycopg2.extras import execute_values
-from dotenv import load_dotenv
 
+from ingestion.db import get_connection, log_run
 from ingestion.fred_client import fetch_observations
-
-load_dotenv()
 
 START_DATE = "2000-01-01"
 END_DATE = date.today().isoformat()
 INDICATORS_CSV = Path(__file__).resolve().parent.parent / "dbt" / "seeds" / "indicators.csv"
-
-
-def get_connection():
-    return psycopg2.connect(
-        host=os.getenv("DB_HOST", "localhost"),
-        port=int(os.getenv("DB_PORT", 5432)),
-        dbname=os.getenv("DB_NAME", "neondb"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD", ""),
-        sslmode=os.getenv("DB_SSLMODE", "prefer"),
-    )
 
 
 def init_raw_table(conn):
@@ -64,11 +49,12 @@ def upsert_observations(conn, series_id: str, rows: list[tuple]):
 
 
 def main():
+    started_at = datetime.now(timezone.utc)
     with open(INDICATORS_CSV, newline="") as f:
         series_ids = [row["series_id"] for row in csv.DictReader(f)]
 
     print(f"Loading {len(series_ids)} series from {START_DATE} to {END_DATE}\n")
-    failed = []
+    failed, rows_loaded = [], 0
     with get_connection() as conn:
         init_raw_table(conn)
         for series_id in series_ids:
@@ -79,7 +65,11 @@ def main():
                 failed.append(series_id)
                 continue
             upsert_observations(conn, series_id, rows)
+            rows_loaded += len(rows)
             print(f"  OK    {series_id} - {len(rows)} rows")
+
+        log_run(conn, "fred", started_at, rows_loaded,
+                len(series_ids) - len(failed), len(failed))
 
     print(f"\nDone. {len(series_ids) - len(failed)} loaded, {len(failed)} failed.")
     if failed:

@@ -1,0 +1,11 @@
+iso3,iso2,country_name,region,country_group
+USA,US,United States,North America,G7
+CAN,CA,Canada,North America,G7
+GBR,GB,United Kingdom,Europe,G7
+FRA,FR,France,Europe,G7
+DEU,DE,Germany,Europe,G7
+ITA,IT,Italy,Europe,G7
+JPN,JP,Japan,Asia,G7
+CHN,CN,China,Asia,Emerging
+IND,IN,India,Asia,Emerging
+BRA,BR,Brazil,South America,Emerging

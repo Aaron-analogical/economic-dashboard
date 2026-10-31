@@ -1,20 +1,24 @@
 {% docs __overview__ %}
-# US Economic Data Warehouse
+# Economic Data Warehouse
 
-ELT pipeline for 23 US macroeconomic indicators from the
-[FRED API](https://fred.stlouisfed.org/) (Federal Reserve Bank of St. Louis).
+ELT pipeline with two sources:
 
-**Flow:** Python extracts FRED observations into `raw.fred_observations`,
-dbt cleans them (`staging`), resamples to a monthly grain and computes
-period-over-period changes (`intermediate`), then publishes a star schema
-(`analytics`) consumed by a Power BI report.
+- **FRED** (Federal Reserve Bank of St. Louis): 23 US macroeconomic indicators,
+  daily to quarterly, for the US deep-dive pages.
+- **World Bank**: 7 annual indicators for 10 countries (G7 + China, India,
+  Brazil), for the country comparison.
+
+**Flow:** Python extractors load each API into `raw` and log every run in
+`raw.ingestion_runs`. dbt cleans the data (`staging`), resamples FRED to a
+monthly grain (`intermediate`), then publishes star schemas and a pipeline
+health report (`analytics`) consumed by a Power BI report.
 
 | Layer | Schema | Materialization |
 |---|---|---|
-| Source | `raw` | table loaded by `ingestion/load_raw.py` |
+| Source | `raw` | tables loaded by `ingestion/load_raw.py` and `ingestion/load_worldbank.py` |
 | Staging / intermediate | `staging` | view |
 | Marts | `analytics` | table |
 
-Indicator metadata (category, unit, transform) lives in the `indicators` seed,
-which is also the list of series the extractor loads.
+Indicator and country metadata live in the `indicators`, `wb_indicators` and
+`countries` seeds, which are also the lists the extractors load.
 {% enddocs %}

@@ -96,3 +96,87 @@ models:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns: [series_id, month_date]
+
+  - name: dim_country
+    description: One row per country tracked in the country comparison (G7 + China, India, Brazil).
+    columns:
+      - name: iso3
+        description: ISO 3166-1 alpha-3 code (primary key).
+        data_tests: [unique, not_null]
+      - name: country_name
+        data_tests: [unique, not_null]
+      - name: country_group
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["G7", "Emerging"]
+
+  - name: dim_wb_indicator
+    description: One row per World Bank indicator with business metadata and data coverage.
+    columns:
+      - name: indicator_code
+        description: World Bank indicator code (primary key).
+        data_tests: [unique, not_null]
+      - name: indicator_name
+        data_tests: [unique, not_null]
+      - name: better_direction
+        description: "`up` when a higher value is better, `down` when lower is better, `none` when neither."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["up", "down", "none"]
+      - name: n_countries
+        description: Countries with at least one value for the indicator.
+
+  - name: fct_country_indicator_annual
+    description: >
+      One row per country, indicator and year from the World Bank. Includes
+      the change vs the previous year and the country's rank among the
+      tracked countries (1 = best).
+    columns:
+      - name: country_iso3
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_country')
+                field: iso3
+      - name: indicator_code
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_wb_indicator')
+                field: indicator_code
+      - name: year
+        data_tests: [not_null]
+      - name: rank_in_year
+        description: 1 = best performer for that indicator and year (largest value when there is no better direction).
+      - name: is_latest_year
+        description: True for the most recent year available for the country and indicator.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [country_iso3, indicator_code, year]
+
+  - name: fct_ingestion_runs
+    description: One row per extractor run (FRED and World Bank), for the pipeline health page.
+    columns:
+      - name: run_id
+        data_tests: [unique, not_null]
+      - name: status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["success", "partial", "failed"]
+
+  - name: rpt_source_freshness
+    description: One row per source with last successful load, data coverage and freshness status.
+    columns:
+      - name: source
+        data_tests: [unique, not_null]
+      - name: freshness_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["fresh", "stale", "never run"]

@@ -34,3 +34,18 @@ seeds:
         frequency: text
         transform: text
         display_unit: text
+    countries:
+      +column_types:
+        iso3: text
+        iso2: text
+        country_name: text
+        region: text
+        country_group: text
+    wb_indicators:
+      +column_types:
+        indicator_code: text
+        indicator_name: text
+        category: text
+        unit: text
+        better_direction: text
+        sort_order: integer
