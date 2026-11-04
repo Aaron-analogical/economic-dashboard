@@ -1,6 +1,7 @@
 # Economic Data Warehouse
 
 [![Data Pipeline](https://github.com/Aaron-analogical/economic-dashboard/actions/workflows/pipeline.yml/badge.svg)](https://github.com/Aaron-analogical/economic-dashboard/actions/workflows/pipeline.yml)
+[![Tests](https://github.com/Aaron-analogical/economic-dashboard/actions/workflows/tests.yml/badge.svg)](https://github.com/Aaron-analogical/economic-dashboard/actions/workflows/tests.yml)
 [![dbt Docs](https://github.com/Aaron-analogical/economic-dashboard/actions/workflows/docs.yml/badge.svg)](https://aaron-analogical.github.io/economic-dashboard/)
 
 End-to-end analytics engineering project with two public sources: 23 US macroeconomic indicators from the Federal Reserve [FRED API](https://fred.stlouisfed.org/) and 7 annual indicators for 10 countries (G7 + China, India, Brazil) from the [World Bank API](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392). Python extractors load raw data into PostgreSQL (Neon) and log every run, dbt models it into tested star schemas, and a Power BI report (PBIP, version-controlled) sits on top. Runs daily on GitHub Actions.
@@ -89,10 +90,10 @@ Modelling choices:
 
 ```
 ingestion/          FRED and World Bank clients, raw loaders, run log
+tests/              pytest unit tests for the extractors (HTTP and database mocked)
 dbt/                dbt project: seeds, models (staging / intermediate / marts), tests, macros
 powerbi/            EconomicDashboard.pbip (TMDL semantic model + report)
-.github/workflows/  pipeline.yml (daily EL + dbt build), docs.yml (dbt docs → Pages)
-Home.py, pages/     Streamlit app (reads FRED directly, independent of the warehouse)
+.github/workflows/  pipeline.yml (daily EL + dbt build), tests.yml (pytest), docs.yml (dbt docs → Pages)
 ```
 
 ## Setup
@@ -109,13 +110,19 @@ Home.py, pages/     Streamlit app (reads FRED directly, independent of the wareh
 ```powershell
 git clone https://github.com/Aaron-analogical/economic-dashboard.git
 cd economic-dashboard
-python -m venv .venv-pipeline
-.venv-pipeline\Scripts\activate
-pip install -r requirements-pipeline.txt
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements-dev.txt   # pipeline + pytest
 copy .env.example .env   # then fill in FRED_API_KEY and DB_* values
 ```
 
-The pipeline runs in its own virtual environment because dbt and Streamlit need conflicting `protobuf` versions.
+### Run the tests
+
+```bash
+pytest
+```
+
+The tests cover the API clients (parsing, pagination, retries, error responses) and the loaders (a failing series is logged, the others still load, and the job exits with an error). HTTP calls and the database are mocked, so no API key or database is needed. They run on every push and pull request.
 
 ### Run the pipeline locally
 
@@ -137,7 +144,7 @@ In PowerShell, load the variables with `Get-Content ..\.env | ForEach-Object { i
 
 1. Add the repository secrets `FRED_API_KEY`, `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`.
 2. *Settings → Pages → Source: GitHub Actions* to publish the dbt docs.
-3. `Data Pipeline` runs daily at 07:00 UTC and can be triggered manually. `dbt Docs` runs on every push to `main` that touches `dbt/`.
+3. `Tests` runs on every push and pull request. `Data Pipeline` runs daily at 07:00 UTC and can be triggered manually. `dbt Docs` runs on every push to `main` that touches `dbt/`.
 
 ### Power BI
 
@@ -169,13 +176,3 @@ The semantic model includes these measures:
 The full list with FRED series IDs and units is in [dbt/seeds/indicators.csv](dbt/seeds/indicators.csv).
 
 Country comparison (World Bank, annual, 2000 onwards): GDP growth, GDP per capita, inflation, unemployment rate, exports (% of GDP), GDP and population for the United States, Canada, United Kingdom, France, Germany, Italy, Japan, China, India and Brazil. See [dbt/seeds/wb_indicators.csv](dbt/seeds/wb_indicators.csv) and [dbt/seeds/countries.csv](dbt/seeds/countries.csv).
-
-## Streamlit app
-
-The original Streamlit app is still in the repository. It queries FRED directly and does not depend on the warehouse.
-
-```bash
-python -m venv venv && venv\Scripts\activate
-pip install -r requirements.txt
-streamlit run Home.py
-```
