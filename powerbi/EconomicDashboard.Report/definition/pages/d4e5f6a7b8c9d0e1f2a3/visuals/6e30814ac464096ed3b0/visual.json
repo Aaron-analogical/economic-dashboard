@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "6e30814ac464096ed3b0",
   "position": {
-    "x": 112,
-    "y": 56,
+    "x": 125.33,
+    "y": 54,
     "z": 2,
-    "height": 64,
-    "width": 96,
+    "height": 76,
+    "width": 109.33,
     "tabOrder": 2
   },
   "visual": {
@@ -84,6 +84,47 @@
               "expr": {
                 "Literal": {
                   "Value": "'Inflation'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
                 }
               }
             }

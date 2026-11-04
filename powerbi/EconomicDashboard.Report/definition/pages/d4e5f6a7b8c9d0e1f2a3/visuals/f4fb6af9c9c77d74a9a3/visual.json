@@ -3,10 +3,10 @@
   "name": "f4fb6af9c9c77d74a9a3",
   "position": {
     "x": 8,
-    "y": 56,
+    "y": 54,
     "z": 1,
-    "height": 64,
-    "width": 96,
+    "height": 76,
+    "width": 109.33,
     "tabOrder": 1
   },
   "visual": {
@@ -84,6 +84,47 @@
               "expr": {
                 "Literal": {
                   "Value": "'GDP growth'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
                 }
               }
             }

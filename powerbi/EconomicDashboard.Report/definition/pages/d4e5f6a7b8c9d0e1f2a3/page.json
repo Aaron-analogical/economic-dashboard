@@ -3,8 +3,8 @@
   "name": "d4e5f6a7b8c9d0e1f2a3",
   "displayName": "Country Tooltip",
   "displayOption": "ActualSize",
-  "height": 200,
-  "width": 320,
+  "height": 220,
+  "width": 360,
   "type": "Tooltip",
   "visibility": "HiddenInViewMode",
   "pageBinding": {

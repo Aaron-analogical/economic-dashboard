@@ -1,33 +1,10 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
   "name": "b1c2d3e4f5a6b7c8d9e0",
   "displayName": "Country Profile",
   "displayOption": "FitToPage",
   "height": 720,
   "width": 1280,
-  "type": "Drillthrough",
-  "visibility": "HiddenInViewMode",
-  "pageBinding": {
-    "name": "4dd3d6041d26942d9e28",
-    "type": "Drillthrough",
-    "acceptsFilterContext": "None",
-    "parameters": [
-      {
-        "name": "fb029838fb71ef913fd3",
-        "boundFilter": "a26fd44dbbc9010940f4",
-        "fieldExpr": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "dim_country"
-              }
-            },
-            "Property": "country_name"
-          }
-        }
-      }
-    ]
-  },
   "filterConfig": {
     "filters": [
       {
@@ -43,8 +20,70 @@
           }
         },
         "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "d",
+              "Entity": "dim_country",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "d"
+                          }
+                        },
+                        "Property": "country_name"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'China'"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        },
         "howCreated": "Drillthrough"
       }
     ]
-  }
+  },
+  "pageBinding": {
+    "name": "4dd3d6041d26942d9e28",
+    "type": "Drillthrough",
+    "parameters": [
+      {
+        "name": "fb029838fb71ef913fd3",
+        "boundFilter": "a26fd44dbbc9010940f4",
+        "fieldExpr": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_country"
+              }
+            },
+            "Property": "country_name"
+          }
+        }
+      }
+    ],
+    "acceptsFilterContext": "None"
+  },
+  "visibility": "HiddenInViewMode",
+  "type": "Drillthrough"
 }

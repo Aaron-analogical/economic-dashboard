@@ -132,7 +132,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Chose the time period'"
+                  "Value": "'Choose the time period'"
                 }
               }
             },
