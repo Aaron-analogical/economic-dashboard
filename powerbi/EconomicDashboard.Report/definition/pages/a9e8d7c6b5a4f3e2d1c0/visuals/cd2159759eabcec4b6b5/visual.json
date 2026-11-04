@@ -23,7 +23,7 @@
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "9pt",
-                      "color": "#64748B"
+                      "color": "#64748b"
                     }
                   },
                   {
@@ -31,7 +31,7 @@
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "9pt",
-                      "color": "#2563EB"
+                      "color": "#2563eb"
                     },
                     "url": "https://github.com/Aaron-analogical/economic-dashboard/actions"
                   }
@@ -44,7 +44,7 @@
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "9pt",
-                      "color": "#64748B"
+                      "color": "#64748b"
                     }
                   },
                   {
@@ -52,7 +52,7 @@
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "9pt",
-                      "color": "#2563EB"
+                      "color": "#2563eb"
                     },
                     "url": "https://aaron-analogical.github.io/economic-dashboard/"
                   }

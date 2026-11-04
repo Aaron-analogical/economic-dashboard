@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "2eb8b41429c160fe8333",
   "position": {
-    "x": 216,
-    "y": 56,
+    "x": 242.67,
+    "y": 54,
     "z": 3,
-    "height": 64,
-    "width": 96,
+    "height": 76,
+    "width": 109.33,
     "tabOrder": 3
   },
   "visual": {
@@ -84,6 +84,47 @@
               "expr": {
                 "Literal": {
                   "Value": "'Unemployment'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
                 }
               }
             }

@@ -412,9 +412,10 @@ table _Measures
 
 	/// Latest population, ignoring the indicator picker.
 	measure 'Tip Population' = CALCULATE ( [WB Latest Value], REMOVEFILTERS ( dim_wb_indicator ), dim_wb_indicator[indicator_code] = "SP.POP.TOTL" )
-		formatString: #,0,,.0"M"
 		displayFolder: Comparison
 		lineageTag: 2d6e4f8a-1c7b-4f9e-9add-8b0c2e4f6a77
+
+		formatStringDefinition = IF ( ABS ( SELECTEDMEASURE () ) >= 1e9, "#,0,,,.00""B""", "#,0,,.0""M""" )
 
 	/// Latest GDP in current US$, ignoring the indicator picker.
 	measure 'Tip GDP' = CALCULATE ( [WB Latest Value], REMOVEFILTERS ( dim_wb_indicator ), dim_wb_indicator[indicator_code] = "NY.GDP.MKTP.CD" )

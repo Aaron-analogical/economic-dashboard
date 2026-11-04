@@ -3,10 +3,10 @@
   "name": "1f5962e6abc5285610ac",
   "position": {
     "x": 8,
-    "y": 128,
+    "y": 136,
     "z": 4,
-    "height": 64,
-    "width": 148,
+    "height": 76,
+    "width": 168,
     "tabOrder": 4
   },
   "visual": {
@@ -84,6 +84,47 @@
               "expr": {
                 "Literal": {
                   "Value": "'GDP per capita'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
                 }
               }
             }
