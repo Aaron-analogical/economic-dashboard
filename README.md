@@ -1,6 +1,13 @@
 # Economic Data Warehouse
 
+[![Data Pipeline](https://github.com/Aaron-analogical/economic-dashboard/actions/workflows/pipeline.yml/badge.svg)](https://github.com/Aaron-analogical/economic-dashboard/actions/workflows/pipeline.yml)
+[![dbt Docs](https://github.com/Aaron-analogical/economic-dashboard/actions/workflows/docs.yml/badge.svg)](https://aaron-analogical.github.io/economic-dashboard/)
+
 End-to-end analytics engineering project with two public sources: 23 US macroeconomic indicators from the Federal Reserve [FRED API](https://fred.stlouisfed.org/) and 7 annual indicators for 10 countries (G7 + China, India, Brazil) from the [World Bank API](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392). Python extractors load raw data into PostgreSQL (Neon) and log every run, dbt models it into tested star schemas, and a Power BI report (PBIP, version-controlled) sits on top. Runs daily on GitHub Actions.
+
+**dbt docs and lineage graph:** <https://aaron-analogical.github.io/economic-dashboard/>
+
+![Country comparison: pick two countries and an indicator, hover for a tooltip, right-click to drill through](doc/img/demo.gif)
 
 ## Report
 
@@ -12,6 +19,10 @@ End-to-end analytics engineering project with two public sources: 23 US macroeco
 | **Pipeline Health** | Pipeline status, hours since the last successful load, run success rate, freshness per source, run history |
 
 Hovering a country on the ranking shows a tooltip card with its key figures. A left navigation rail and a custom theme are shared by every page.
+
+| Pipeline Health | US Overview |
+|---|---|
+| ![Pipeline Health page](doc/img/pipeline-health.png) | ![US Overview page](doc/img/us-overview.png) |
 
 ## Architecture
 
