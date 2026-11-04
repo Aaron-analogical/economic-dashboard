@@ -1,0 +1,30 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["PgHost","PgDatabase","dim_indicator","dim_date","fct_indicator_monthly","fct_observations","dim_country","dim_wb_indicator","fct_country_indicator_annual","fct_ingestion_runs","rpt_source_freshness","Country A","Country B","_Measures"]
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table _Measures
+ref table dim_indicator
+ref table dim_date
+ref table fct_indicator_monthly
+ref table fct_observations
+ref table dim_country
+ref table dim_wb_indicator
+ref table fct_country_indicator_annual
+ref table fct_ingestion_runs
+ref table rpt_source_freshness
+ref table 'Country A'
+ref table 'Country B'
+
+ref cultureInfo en-US
+

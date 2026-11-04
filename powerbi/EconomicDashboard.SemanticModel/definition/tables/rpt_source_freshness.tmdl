@@ -1,0 +1,107 @@
+table rpt_source_freshness
+	lineageTag: 6439ae78-621f-4be7-b181-0259b93d534d
+
+	column source
+		dataType: string
+		lineageTag: f2baf7c1-a3f4-49c2-a99a-5e9b67e29bce
+		summarizeBy: none
+		sourceColumn: source
+
+		annotation SummarizationSetBy = User
+
+	column source_name
+		dataType: string
+		lineageTag: 74585f88-974f-4b66-b7f3-2894f4f3290d
+		summarizeBy: none
+		sourceColumn: source_name
+
+		annotation SummarizationSetBy = User
+
+	column n_series
+		dataType: int64
+		formatString: 0
+		lineageTag: 3b1a326f-5a4d-4dc2-99d0-495b9564aef5
+		summarizeBy: none
+		sourceColumn: n_series
+
+		annotation SummarizationSetBy = User
+
+	column n_rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: a343209f-de1a-4740-af75-6e913b30c612
+		summarizeBy: none
+		sourceColumn: n_rows
+
+		annotation SummarizationSetBy = User
+
+	column latest_data_date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 56d5e54d-9d2d-4bc5-aa69-861fa626c9e7
+		summarizeBy: none
+		sourceColumn: latest_data_date
+
+		annotation SummarizationSetBy = User
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column last_success_at
+		dataType: dateTime
+		formatString: yyyy-mm-dd hh:nn
+		lineageTag: 7dcaf78e-25c4-420e-804b-c880ce71b206
+		summarizeBy: none
+		sourceColumn: last_success_at
+
+		annotation SummarizationSetBy = User
+
+	column last_run_at
+		dataType: dateTime
+		formatString: yyyy-mm-dd hh:nn
+		lineageTag: f93dbc5c-8257-430c-8ec0-26db0db9bef8
+		summarizeBy: none
+		sourceColumn: last_run_at
+
+		annotation SummarizationSetBy = User
+
+	column n_runs
+		dataType: int64
+		formatString: 0
+		lineageTag: a250799a-f7cd-48f6-a218-c4d61e141162
+		summarizeBy: none
+		sourceColumn: n_runs
+
+		annotation SummarizationSetBy = User
+
+	column n_failed_runs
+		dataType: int64
+		formatString: 0
+		lineageTag: 2c30491c-d70c-41f3-a011-832e94c01167
+		summarizeBy: none
+		sourceColumn: n_failed_runs
+
+		annotation SummarizationSetBy = User
+
+	column freshness_status
+		dataType: string
+		lineageTag: d8e331f5-f07e-4fb4-98fb-8312bd9fc381
+		summarizeBy: none
+		sourceColumn: freshness_status
+
+		annotation SummarizationSetBy = User
+
+	partition rpt_source_freshness = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PgHost, PgDatabase),
+				    Navigation = Source{[Schema = "analytics", Item = "rpt_source_freshness"]}[Data],
+				    SelectedColumns = Table.SelectColumns(Navigation, {"source", "source_name", "n_series", "n_rows", "latest_data_date", "last_success_at", "last_run_at", "n_runs", "n_failed_runs", "freshness_status"}),
+				    Typed = Table.TransformColumnTypes(SelectedColumns, {{"source", type text}, {"source_name", type text}, {"n_series", Int64.Type}, {"n_rows", Int64.Type}, {"latest_data_date", type date}, {"last_success_at", type datetime}, {"last_run_at", type datetime}, {"n_runs", Int64.Type}, {"n_failed_runs", Int64.Type}, {"freshness_status", type text}})
+				in
+				    Typed
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

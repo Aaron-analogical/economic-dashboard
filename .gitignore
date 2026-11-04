@@ -50,3 +50,5 @@ logs/
 # Data files (optional - uncomment if needed)
 # *.csv
 # data/
+# Pipeline virtual environment
+.venv-pipeline/

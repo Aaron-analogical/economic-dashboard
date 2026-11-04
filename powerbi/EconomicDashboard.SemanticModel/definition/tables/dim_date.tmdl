@@ -1,0 +1,111 @@
+table dim_date
+	lineageTag: 1ea88033-bc5d-47b4-8c6f-ad57de39891c
+	dataCategory: Time
+
+	column date
+		dataType: dateTime
+		isKey
+		formatString: yyyy-mm-dd
+		lineageTag: 5ddb9d40-8a5a-4aa7-87bf-173f4cda742c
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = User
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: b76e10c4-982b-42a1-820d-e8c8dacb47c2
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = User
+
+	column quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: ce0c244e-a0cb-499d-877b-b76052d24b81
+		summarizeBy: none
+		sourceColumn: quarter
+
+		annotation SummarizationSetBy = User
+
+	column quarter_label
+		dataType: string
+		lineageTag: 09230dcf-f9fa-4165-b7e5-0f11d92b662e
+		summarizeBy: none
+		sourceColumn: quarter_label
+
+		annotation SummarizationSetBy = User
+
+	column month
+		dataType: int64
+		formatString: 0
+		lineageTag: 4318c463-2a36-4fd5-be89-3208b3ace8d4
+		summarizeBy: none
+		sourceColumn: month
+
+		annotation SummarizationSetBy = User
+
+	column month_short
+		dataType: string
+		lineageTag: 1e391347-d4a3-48d3-a8ca-a756b202e20d
+		summarizeBy: none
+		sourceColumn: month_short
+		sortByColumn: month
+
+		annotation SummarizationSetBy = User
+
+	column year_month
+		dataType: string
+		lineageTag: 49eaab73-5d04-450d-8750-e3ead29fca0a
+		summarizeBy: none
+		sourceColumn: year_month
+
+		annotation SummarizationSetBy = User
+
+	column month_start
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 12a8ef6c-02bb-4a33-a4f6-01db9682cac8
+		summarizeBy: none
+		sourceColumn: month_start
+
+		annotation SummarizationSetBy = User
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column day_of_week
+		dataType: int64
+		formatString: 0
+		lineageTag: ee684fc7-1e61-4b9e-af7b-72cb3a3aacda
+		summarizeBy: none
+		sourceColumn: day_of_week
+
+		annotation SummarizationSetBy = User
+
+	column is_weekend
+		dataType: boolean
+		lineageTag: 55845c6e-60fd-498e-a148-631413f70de5
+		summarizeBy: none
+		sourceColumn: is_weekend
+
+		annotation SummarizationSetBy = User
+
+	partition dim_date = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PgHost, PgDatabase),
+				    Navigation = Source{[Schema = "analytics", Item = "dim_date"]}[Data],
+				    SelectedColumns = Table.SelectColumns(Navigation, {"date", "year", "quarter", "quarter_label", "month", "month_short", "year_month", "month_start", "day_of_week", "is_weekend"}),
+				    Typed = Table.TransformColumnTypes(SelectedColumns, {{"date", type date}, {"year", Int64.Type}, {"quarter", Int64.Type}, {"quarter_label", type text}, {"month", Int64.Type}, {"month_short", type text}, {"year_month", type text}, {"month_start", type date}, {"day_of_week", Int64.Type}, {"is_weekend", type logical}})
+				in
+				    Typed
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,29 @@
+version: 2
+
+sources:
+  - name: fred
+    description: Raw FRED observations loaded daily by `ingestion/load_raw.py`.
+    schema: raw
+    config:
+      loaded_at_field: loaded_at
+      freshness:
+        warn_after: {count: 3, period: day}
+        error_after: {count: 7, period: day}
+    tables:
+      - name: fred_observations
+        description: One row per series and observation date, as returned by the FRED API.
+        columns:
+          - name: series_id
+            description: FRED series identifier.
+            data_tests: [not_null]
+          - name: date
+            description: Observation date (period start for monthly and quarterly series).
+            data_tests: [not_null]
+          - name: value
+            description: Observed value; NULL when FRED reports a missing value (".").
+          - name: loaded_at
+            description: Timestamp of the last load or update of this row.
+        data_tests:
+          - dbt_utils.unique_combination_of_columns:
+              arguments:
+                combination_of_columns: [series_id, date]

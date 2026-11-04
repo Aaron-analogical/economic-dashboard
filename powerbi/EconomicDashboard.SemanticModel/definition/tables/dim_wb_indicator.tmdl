@@ -1,0 +1,114 @@
+table dim_wb_indicator
+	lineageTag: 7a01876d-e2cb-4562-93c8-2e85bb9af0eb
+
+	column indicator_code
+		dataType: string
+		lineageTag: 039d3df7-c1c6-4d79-b617-daa065104458
+		summarizeBy: none
+		sourceColumn: indicator_code
+
+		annotation SummarizationSetBy = User
+
+	column indicator_name
+		dataType: string
+		lineageTag: b7563d5e-c948-491c-9e7c-f45fc9b55d43
+		summarizeBy: none
+		sourceColumn: indicator_name
+		sortByColumn: sort_order
+
+		annotation SummarizationSetBy = User
+
+	column category
+		dataType: string
+		lineageTag: 49501d03-99fc-435f-b08f-24fd05e5a969
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = User
+
+	column unit
+		dataType: string
+		lineageTag: f44e989f-b3a2-4a8f-a00e-70b708f514f3
+		summarizeBy: none
+		sourceColumn: unit
+
+		annotation SummarizationSetBy = User
+
+	column better_direction
+		dataType: string
+		lineageTag: eabefa3e-0e46-4889-a503-e32bcebd0e1b
+		summarizeBy: none
+		sourceColumn: better_direction
+
+		annotation SummarizationSetBy = User
+
+	column sort_order
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 25f874d1-19ad-4bca-899f-1c650e7603c5
+		summarizeBy: none
+		sourceColumn: sort_order
+
+		annotation SummarizationSetBy = User
+
+	column worldbank_url
+		dataType: string
+		lineageTag: ccb7641f-8db4-48d1-8b03-2527f8c005d4
+		dataCategory: WebUrl
+		summarizeBy: none
+		sourceColumn: worldbank_url
+
+		annotation SummarizationSetBy = User
+
+	column first_year
+		dataType: int64
+		formatString: 0
+		lineageTag: a555701f-b97a-43ee-9ff0-4a81228d4f24
+		summarizeBy: none
+		sourceColumn: first_year
+
+		annotation SummarizationSetBy = User
+
+	column last_year
+		dataType: int64
+		formatString: 0
+		lineageTag: b632c4e9-9ac4-4936-94e2-7abd892ffc59
+		summarizeBy: none
+		sourceColumn: last_year
+
+		annotation SummarizationSetBy = User
+
+	column n_countries
+		dataType: int64
+		formatString: 0
+		lineageTag: 72699cfd-01be-4f87-940b-4af940500227
+		summarizeBy: none
+		sourceColumn: n_countries
+
+		annotation SummarizationSetBy = User
+
+	column n_observations
+		dataType: int64
+		formatString: #,0
+		lineageTag: a314523f-8cc7-4231-88f9-dd638bd70164
+		summarizeBy: none
+		sourceColumn: n_observations
+
+		annotation SummarizationSetBy = User
+
+	partition dim_wb_indicator = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PgHost, PgDatabase),
+				    Navigation = Source{[Schema = "analytics", Item = "dim_wb_indicator"]}[Data],
+				    SelectedColumns = Table.SelectColumns(Navigation, {"indicator_code", "indicator_name", "category", "unit", "better_direction", "sort_order", "worldbank_url", "first_year", "last_year", "n_countries", "n_observations"}),
+				    Typed = Table.TransformColumnTypes(SelectedColumns, {{"indicator_code", type text}, {"indicator_name", type text}, {"category", type text}, {"unit", type text}, {"better_direction", type text}, {"sort_order", Int64.Type}, {"worldbank_url", type text}, {"first_year", Int64.Type}, {"last_year", Int64.Type}, {"n_countries", Int64.Type}, {"n_observations", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

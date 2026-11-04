@@ -1,6 +1,8 @@
 ﻿# API → PostgreSQL → Power BI Pipeline
 
-Portable pattern for building data pipelines that fetch from an external API, persist to PostgreSQL, and expose to Power BI. Extracted from `economic-dashboard` for reuse across projects.
+Portable pattern for building data pipelines that fetch from an external API, persist to PostgreSQL, and expose to Power BI. Originally extracted from `economic-dashboard` for reuse across projects.
+
+> `economic-dashboard` has since moved to an ELT layout: `ingestion/load_raw.py` loads a raw table and dbt builds the reporting tables (see the main README). The minimal pattern below remains valid when no transformation layer is needed.
 
 ---
 

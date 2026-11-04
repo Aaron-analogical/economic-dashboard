@@ -1,0 +1,51 @@
+version: 2
+
+sources:
+  - name: worldbank
+    description: Raw World Bank indicators loaded daily by `ingestion/load_worldbank.py`.
+    schema: raw
+    config:
+      loaded_at_field: loaded_at
+      freshness:
+        warn_after: {count: 3, period: day}
+        error_after: {count: 7, period: day}
+    tables:
+      - name: worldbank_observations
+        description: One row per country, indicator and year, as returned by the World Bank API.
+        columns:
+          - name: country_iso3
+            description: ISO 3166-1 alpha-3 country code.
+            data_tests: [not_null]
+          - name: indicator_code
+            description: World Bank indicator code (e.g. `NY.GDP.MKTP.KD.ZG`).
+            data_tests: [not_null]
+          - name: year
+            data_tests: [not_null]
+          - name: value
+            description: Observed value; NULL when the World Bank has no figure yet.
+          - name: loaded_at
+            description: Timestamp of the last load or update of this row.
+        data_tests:
+          - dbt_utils.unique_combination_of_columns:
+              arguments:
+                combination_of_columns: [country_iso3, indicator_code, year]
+
+  - name: pipeline
+    description: Operational metadata written by the extractors.
+    schema: raw
+    tables:
+      - name: ingestion_runs
+        description: One row per extractor run, written by `ingestion/db.py` (`log_run`).
+        columns:
+          - name: run_id
+            data_tests: [unique, not_null]
+          - name: source
+            data_tests:
+              - accepted_values:
+                  arguments:
+                    values: ["fred", "worldbank"]
+          - name: status
+            data_tests:
+              - accepted_values:
+                  arguments:
+                    values: ["success", "partial", "failed"]

@@ -1,0 +1,8 @@
+indicator_code,indicator_name,category,unit,better_direction,sort_order
+NY.GDP.MKTP.KD.ZG,GDP Growth,Growth,% per year,up,1
+NY.GDP.PCAP.CD,GDP per Capita,Growth,Current US$,up,2
+FP.CPI.TOTL.ZG,Inflation,Prices,% per year,down,3
+SL.UEM.TOTL.ZS,Unemployment Rate,Labor,% of labor force,down,4
+NE.EXP.GNFS.ZS,Exports,Trade,% of GDP,up,5
+NY.GDP.MKTP.CD,GDP,Size,Current US$,up,6
+SP.POP.TOTL,Population,Size,Persons,none,7

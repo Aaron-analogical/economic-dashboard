@@ -1,0 +1,89 @@
+table fct_country_indicator_annual
+	lineageTag: e8c1c4f5-0ed5-4aa6-9990-5f1c4472e598
+
+	column country_iso3
+		dataType: string
+		isHidden
+		lineageTag: 12263618-052f-49a0-a99f-ccf8ba5e6b99
+		summarizeBy: none
+		sourceColumn: country_iso3
+
+		annotation SummarizationSetBy = User
+
+	column indicator_code
+		dataType: string
+		isHidden
+		lineageTag: 11b7a0cc-b8a7-4c93-9e1e-de36b616e1d7
+		summarizeBy: none
+		sourceColumn: indicator_code
+
+		annotation SummarizationSetBy = User
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 96829110-1733-48b9-bbf1-269e43c9c29a
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = User
+
+	column value
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 229f22f5-f592-49e5-b2ec-bb1506b52076
+		summarizeBy: none
+		sourceColumn: value
+
+		annotation SummarizationSetBy = User
+
+	column value_prev_year
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 2f0196f1-fd77-4f29-96eb-b27f32697357
+		summarizeBy: none
+		sourceColumn: value_prev_year
+
+		annotation SummarizationSetBy = User
+
+	column change_vs_prev_year
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 50cf9266-8791-473d-b5ff-0b3b08ff848e
+		summarizeBy: none
+		sourceColumn: change_vs_prev_year
+
+		annotation SummarizationSetBy = User
+
+	column rank_in_year
+		dataType: int64
+		formatString: 0
+		lineageTag: dbcb56ef-f543-4864-b549-acee5e70f825
+		summarizeBy: none
+		sourceColumn: rank_in_year
+
+		annotation SummarizationSetBy = User
+
+	column is_latest_year
+		dataType: boolean
+		lineageTag: 6159846d-cc37-42da-8bd8-bbae85a773cf
+		summarizeBy: none
+		sourceColumn: is_latest_year
+
+		annotation SummarizationSetBy = User
+
+	partition fct_country_indicator_annual = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PgHost, PgDatabase),
+				    Navigation = Source{[Schema = "analytics", Item = "fct_country_indicator_annual"]}[Data],
+				    SelectedColumns = Table.SelectColumns(Navigation, {"country_iso3", "indicator_code", "year", "value", "value_prev_year", "change_vs_prev_year", "rank_in_year", "is_latest_year"}),
+				    Typed = Table.TransformColumnTypes(SelectedColumns, {{"country_iso3", type text}, {"indicator_code", type text}, {"year", Int64.Type}, {"value", type number}, {"value_prev_year", type number}, {"change_vs_prev_year", type number}, {"rank_in_year", Int64.Type}, {"is_latest_year", type logical}})
+				in
+				    Typed
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

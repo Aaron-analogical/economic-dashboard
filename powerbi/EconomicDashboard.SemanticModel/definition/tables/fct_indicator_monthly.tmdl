@@ -1,0 +1,122 @@
+table fct_indicator_monthly
+	lineageTag: f329de02-08da-4454-97e1-c10e319feee1
+
+	column series_id
+		dataType: string
+		isHidden
+		lineageTag: a97960af-0649-4882-8899-4f84743e6d0f
+		summarizeBy: none
+		sourceColumn: series_id
+
+		annotation SummarizationSetBy = User
+
+	column month_date
+		dataType: dateTime
+		isHidden
+		formatString: yyyy-mm-dd
+		lineageTag: 795ed77c-c7b9-4714-aaf0-a781f12076b4
+		summarizeBy: none
+		sourceColumn: month_date
+
+		annotation SummarizationSetBy = User
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column value
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 301c9d46-1a01-450f-9b68-92bb26abb644
+		summarizeBy: none
+		sourceColumn: value
+
+		annotation SummarizationSetBy = User
+
+	column value_prev_period
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 4f0c1f9f-6f7a-41e4-8856-059cf7056a1e
+		summarizeBy: none
+		sourceColumn: value_prev_period
+
+		annotation SummarizationSetBy = User
+
+	column value_year_ago
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 76ff8f92-67c2-4446-b6e8-09c718195a42
+		summarizeBy: none
+		sourceColumn: value_year_ago
+
+		annotation SummarizationSetBy = User
+
+	column prev_period_pct
+		dataType: double
+		formatString: #,0.00
+		lineageTag: be801ff8-24d6-44ec-a797-48f107e776d1
+		summarizeBy: none
+		sourceColumn: prev_period_pct
+
+		annotation SummarizationSetBy = User
+
+	column yoy_pct
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 7cff0fb0-986a-4932-b0c4-3ef7eb7c9f7f
+		summarizeBy: none
+		sourceColumn: yoy_pct
+
+		annotation SummarizationSetBy = User
+
+	column yoy_change
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 3883540a-376c-46bb-ad6f-4d6a9599bf22
+		summarizeBy: none
+		sourceColumn: yoy_change
+
+		annotation SummarizationSetBy = User
+
+	column display_value
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 8e64f9b6-a31d-4a82-b60f-0d5ad83b5453
+		summarizeBy: none
+		sourceColumn: display_value
+
+		annotation SummarizationSetBy = User
+
+	column n_observations
+		dataType: int64
+		formatString: 0
+		lineageTag: 0b6682d2-c636-4a56-93c7-8831a3aef129
+		summarizeBy: none
+		sourceColumn: n_observations
+
+		annotation SummarizationSetBy = User
+
+	column last_observation_date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 87cac853-27f5-4db4-ae78-5022b16ee8ff
+		summarizeBy: none
+		sourceColumn: last_observation_date
+
+		annotation SummarizationSetBy = User
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition fct_indicator_monthly = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PgHost, PgDatabase),
+				    Navigation = Source{[Schema = "analytics", Item = "fct_indicator_monthly"]}[Data],
+				    SelectedColumns = Table.SelectColumns(Navigation, {"series_id", "month_date", "value", "value_prev_period", "value_year_ago", "prev_period_pct", "yoy_pct", "yoy_change", "display_value", "n_observations", "last_observation_date"}),
+				    Typed = Table.TransformColumnTypes(SelectedColumns, {{"series_id", type text}, {"month_date", type date}, {"value", type number}, {"value_prev_period", type number}, {"value_year_ago", type number}, {"prev_period_pct", type number}, {"yoy_pct", type number}, {"yoy_change", type number}, {"display_value", type number}, {"n_observations", Int64.Type}, {"last_observation_date", type date}})
+				in
+				    Typed
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

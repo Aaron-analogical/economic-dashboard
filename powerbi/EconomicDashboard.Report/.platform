@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "EconomicDashboard"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "9521a3a5-0bd7-424d-af9e-95fa154e4def"
+  }
+}
