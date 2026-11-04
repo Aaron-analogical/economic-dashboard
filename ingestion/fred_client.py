@@ -1,4 +1,4 @@
-"""Minimal FRED API client (no Streamlit dependency)."""
+"""Minimal FRED API client."""
 
 import os
 import requests

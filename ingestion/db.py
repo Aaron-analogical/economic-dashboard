@@ -38,15 +38,17 @@ def init_run_log(conn):
     conn.commit()
 
 
+def run_status(series_ok: int, series_failed: int) -> str:
+    """'success' if nothing failed, 'partial' if some series loaded, otherwise 'failed'."""
+    if series_failed == 0:
+        return "success"
+    return "partial" if series_ok > 0 else "failed"
+
+
 def log_run(conn, source: str, started_at: datetime, rows_loaded: int,
             series_ok: int, series_failed: int):
-    """Record one extractor run. Status is 'success', 'partial' or 'failed'."""
-    if series_failed == 0:
-        status = "success"
-    elif series_ok > 0:
-        status = "partial"
-    else:
-        status = "failed"
+    """Record one extractor run in raw.ingestion_runs."""
+    status = run_status(series_ok, series_failed)
     init_run_log(conn)
     with conn.cursor() as cur:
         cur.execute("""
