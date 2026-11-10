@@ -8,6 +8,10 @@ End-to-end analytics engineering project with two public sources: 23 US macroeco
 
 **dbt docs and lineage graph:** <https://aaron-analogical.github.io/economic-dashboard/>
 
+**Explore the report yourself:** [download EconomicDashboard.pbix](https://github.com/Aaron-analogical/economic-dashboard/releases/latest/download/EconomicDashboard.pbix) (1 MB, opens in the free [Power BI Desktop](https://www.microsoft.com/power-platform/products/power-bi/desktop), Windows).
+
+> **View only.** The file contains a snapshot of the data, so every page, filter, tooltip and drill-through works as soon as you open it. Do not click *Refresh*: it will fail, because the live database is private. The pipeline refreshes the warehouse daily; the snapshot is updated with each [release](https://github.com/Aaron-analogical/economic-dashboard/releases).
+
 ![Country comparison: pick two countries and an indicator, hover for a tooltip, right-click to drill through](doc/img/demo.gif)
 
 ## Report
